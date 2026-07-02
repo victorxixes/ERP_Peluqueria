@@ -1,0 +1,13 @@
+import { Sidebar } from "../components/Sidebar";
+
+export const Layout = ({ children }: { children: any }) => {
+  return (
+    <div className="flex bg-slate-900 text-slate-200 min-h-screen">
+      <Sidebar />
+
+      <main className="flex-1 p-8 overflow-y-auto">
+        {children}
+      </main>
+    </div>
+  );
+};

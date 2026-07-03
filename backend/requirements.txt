@@ -8,3 +8,9 @@ python-dotenv
 psycopg2-binary
 openpyxl
 pandas
+numpy
+scikit-learn
+joblib
+requests
+python-dateutil
+

@@ -1,7 +1,7 @@
 import api from "../utils/api";
 
 export const getTickets = async () => {
-  const res = await api.get("/historico");
+  const res = await api.get("/historico/");
   return res.data;
 };
 

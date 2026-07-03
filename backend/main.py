@@ -8,7 +8,7 @@ from models.historico import Historico
 from models.gasto import Gasto
 from models.activo import Activo
 from models.ingreso import Ingreso
-from models.log import Logs
+from models.log import Log
 
 
 # Crear tablas (solo temporal)

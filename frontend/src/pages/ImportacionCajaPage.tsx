@@ -13,8 +13,9 @@ export const ImportacionCajaPage: React.FC = () => {
     setError(null);
     setResultado(null);
 
-    if (!cajaFile || !serviciosFile || !productosFile) {
-      setError("Debes seleccionar los tres archivos: Caja, Servicios y Productos.");
+    // ✔ SOLO obligamos el Excel de Caja
+    if (!cajaFile) {
+      setError("Debes seleccionar el Excel de Caja (ventas).");
       return;
     }
 
@@ -23,10 +24,18 @@ export const ImportacionCajaPage: React.FC = () => {
 
       const formData = new FormData();
       formData.append("caja_excel", cajaFile);
-      formData.append("servicios_excel", serviciosFile);
-      formData.append("productos_excel", productosFile);
 
-      const res = await fetch("/importar-caja", {
+      // ✔ Servicios opcional
+      if (serviciosFile) {
+        formData.append("servicios_excel", serviciosFile);
+      }
+
+      // ✔ Productos opcional
+      if (productosFile) {
+        formData.append("productos_excel", productosFile);
+      }
+
+      const res = await fetch("/importar-caja/", {
         method: "POST",
         body: formData,
       });
@@ -37,6 +46,7 @@ export const ImportacionCajaPage: React.FC = () => {
 
       const data = await res.json();
       setResultado(data);
+
     } catch (err: any) {
       setError(err.message || "Error desconocido al importar la caja.");
     } finally {
@@ -52,8 +62,7 @@ export const ImportacionCajaPage: React.FC = () => {
         </h1>
 
         <p className="text-sm text-slate-400 mb-6">
-          Sube el Excel de caja del mes junto con los catálogos de servicios y productos.
-          El sistema reconstruirá los tickets, calculará el IVA y registrará el histórico.
+          Sube el Excel de caja del mes. Los catálogos de servicios y productos son opcionales.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -80,7 +89,7 @@ export const ImportacionCajaPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">
-                Catálogo de Servicios (Servicios.xlsx)
+                Catálogo de Servicios (Opcional)
               </label>
               <input
                 type="file"
@@ -99,7 +108,7 @@ export const ImportacionCajaPage: React.FC = () => {
             {/* Productos */}
             <div>
               <label className="block text-sm font-medium mb-2">
-                Catálogo de Productos (Productos.xlsx)
+                Catálogo de Productos (Opcional)
               </label>
               <input
                 type="file"
@@ -157,6 +166,7 @@ export const ImportacionCajaPage: React.FC = () => {
               <span className="font-semibold">Movimientos histórico:</span>{" "}
               {resultado.resultado?.movimientos_historico ?? "-"}
             </p>
+
             {resultado.resultado?.desconocidos?.length > 0 && (
               <div className="mt-2">
                 <p className="font-semibold mb-1">Ítems desconocidos:</p>
@@ -169,6 +179,7 @@ export const ImportacionCajaPage: React.FC = () => {
                 </ul>
               </div>
             )}
+
             {resultado.resultado?.errores?.length > 0 && (
               <div className="mt-2">
                 <p className="font-semibold mb-1">Errores por ticket:</p>

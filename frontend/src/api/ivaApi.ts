@@ -1,11 +1,8 @@
-import api from "../utils/api";
+import axios from "axios";
 
-export const getIVAResumen = async (desde: string, hasta: string) => {
-  const res = await api.get(`/iva/resumen?desde=${desde}&hasta=${hasta}`);
-  return res.data;
-};
+const api = axios.create({
+  baseURL: "https://erp-peluqueria.onrender.com",
+});
 
-export const getIVAPrevision = async () => {
-  const res = await api.get(`/iva/prevision`);
-  return res.data;
-};
+export default api;
+

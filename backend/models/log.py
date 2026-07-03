@@ -12,3 +12,4 @@ class Log(Base):
     fecha = Column(DateTime, default=datetime.utcnow)
     datos = Column(JSON)
 
+

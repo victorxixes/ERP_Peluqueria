@@ -6,6 +6,7 @@ export const getTickets = async () => {
 };
 
 export const getTicketDetalle = async (ticketId: number) => {
-  const res = await api.get(`/historico/${ticketId}`);
+  const res = await api.get(`/historico/${ticketId}/`);
   return res.data;
 };
+

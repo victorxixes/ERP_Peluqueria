@@ -1,5 +1,7 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from db import Base, engine
+
 # IMPORTA TODOS LOS MODELOS ANTES DE CREAR TABLAS
 from models.usuario import Usuario
 from models.proveedor import Proveedor
@@ -10,11 +12,10 @@ from models.activo import Activo
 from models.ingreso import Ingreso
 from models.log import Log
 
-
 # Crear tablas (solo temporal)
 Base.metadata.create_all(bind=engine)
 
-# Routers que SÍ funcionan
+# Routers
 from routers.importar_caja import router as importar_caja_router
 from routers.catalogo import router as catalogo_router
 from routers.irpf import router as irpf_router
@@ -27,11 +28,25 @@ from routers.backup import router as backup_router
 from routers.ia_fiscal import router as ia_fiscal_router
 from routers.modelo_390 import router as modelo_390_router
 from routers.informes import router as informes_router
-from routers.backup import router as backup_router
+from routers.prevision_iva import router as prevision_iva_router
+from routers.cierre_fiscal import router as cierre_fiscal_router
 
 app = FastAPI()
 
-# Activamos SOLO los routers que funcionan
+# ============================
+# CORS — IMPRESCINDIBLE
+# ============================
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://erp-peluqueria-front.onrender.com"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ============================
+# Routers ACTIVOS
+# ============================
 app.include_router(importar_caja_router)
 app.include_router(catalogo_router)
 app.include_router(irpf_router)
@@ -44,9 +59,12 @@ app.include_router(backup_router)
 app.include_router(ia_fiscal_router)
 app.include_router(modelo_390_router)
 app.include_router(informes_router)
-app.include_router(backup_router)
+app.include_router(prevision_iva_router)
+app.include_router(cierre_fiscal_router)
 
-# Routers desactivados temporalmente (tienen errores internos)
+# ============================
+# Routers desactivados temporalmente
+# ============================
 # app.include_router(iva.router)
 # app.include_router(proveedores.router)
 # app.include_router(usuarios.router)
@@ -55,6 +73,5 @@ app.include_router(backup_router)
 # app.include_router(gastos.router)
 # app.include_router(ingresos.router)
 # app.include_router(nominas.router)
-# app.include_router(informes.router)
 # app.include_router(activos.router)
 # app.include_router(auth.router)

@@ -7,6 +7,8 @@ from models.producto import Producto
 from models.historico import Historico
 from models.gasto import Gasto
 from models.activo import Activo
+from models.ingreso import Ingreso
+
 
 # Crear tablas (solo temporal)
 Base.metadata.create_all(bind=engine)

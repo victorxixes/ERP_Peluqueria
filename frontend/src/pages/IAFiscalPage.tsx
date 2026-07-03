@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api } from "../utils/api";
+import api from "../utils/api";
 
 export const IAFiscalPage = () => {
   const [analisis, setAnalisis] = useState<any | null>(null);

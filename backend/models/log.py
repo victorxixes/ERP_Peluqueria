@@ -11,3 +11,4 @@ class Log(Base):
     usuario = Column(String)
     fecha = Column(DateTime, default=datetime.utcnow)
     datos = Column(JSON)
+

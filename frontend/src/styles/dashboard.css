@@ -1,0 +1,32 @@
+/* ============================
+   GLOBAL – Estilo Premium 2026
+   ============================ */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  background: #f7f8fa;
+  color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: #2563eb;
+  text-decoration: none;
+  transition: 0.2s;
+}
+a:hover {
+  color: #1e40af;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}

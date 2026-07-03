@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ImportacionCaja: React.FC = () => {
+export const ImportacionCajaPage: React.FC = () => {
   const [cajaFile, setCajaFile] = useState<File | null>(null);
   const [serviciosFile, setServiciosFile] = useState<File | null>(null);
   const [productosFile, setProductosFile] = useState<File | null>(null);
@@ -189,5 +189,3 @@ const ImportacionCaja: React.FC = () => {
     </div>
   );
 };
-
-export default ImportacionCaja;

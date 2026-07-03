@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import { DashboardPage } from "./pages/DashboardPage";
 import { IngresosPage } from "./pages/IngresosPage";
 import { GastosPage } from "./pages/GastosPage";
@@ -17,10 +18,9 @@ import { IAFiscalPage } from "./pages/IAFiscalPage";
 import { ValidacionExcelPage } from "./pages/ValidacionExcelPage";
 import { LogsPage } from "./pages/LogsPage";
 import { BackupPage } from "./pages/BackupPage";
+import { ImportacionCajaPage } from "./pages/ImportacionCajaPage";
+
 import { Layout } from "./layout/Layout";
-import {HistoricoPage} from "./pages/HistoricoPage";
-import {ImportacionCajaPage} from "./pages/ImportacionCajaPage";
-import { LogsPage } from "./pages/LogsPage";
 
 export const App = () => {
   return (
@@ -35,10 +35,9 @@ export const App = () => {
           <Route path="/activos" element={<ActivosPage />} />
           <Route path="/nominas" element={<NominasPage />} />
           <Route path="/usuarios" element={<UsuariosPage />} />
-<Route path="/logs" element={<LogsPage />} />
+          <Route path="/logs" element={<LogsPage />} />
 
           <Route path="/historico" element={<HistoricoPage />} />
-
           <Route path="/informes" element={<InformesPage />} />
 
           <Route path="/configuracion-fiscal" element={<ConfiguracionFiscalPage />} />
@@ -47,16 +46,11 @@ export const App = () => {
           <Route path="/iva-anual" element={<IVAAnualPage />} />
 
           <Route path="/irpf" element={<IRPFPage />} />
-
           <Route path="/ia-fiscal" element={<IAFiscalPage />} />
 
           <Route path="/validacion-excel" element={<ValidacionExcelPage />} />
-
-          <Route path="/logs" element={<LogsPage />} />
-<Route path="/" element={<DashboardPage />} />
           <Route path="/backup" element={<BackupPage />} />
-<Route path="/historico" element={<HistoricoPage />} />
-<Route path="/importacion-caja" element={<ImportacionCajaPage />} />
+          <Route path="/importacion-caja" element={<ImportacionCajaPage />} />
         </Routes>
       </Layout>
     </BrowserRouter>

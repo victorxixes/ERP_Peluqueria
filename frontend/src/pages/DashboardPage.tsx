@@ -5,7 +5,7 @@ export const DashboardPage = () => {
   const [data, setData] = useState<any>(null);
 
   const cargar = async () => {
-    const r = await api.get("/dashboard");
+    const r = await api.get("/dashboard/");
     setData(r.data);
   };
 

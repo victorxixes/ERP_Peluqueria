@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import api from "../utils/api";
 
 export const ImportacionCajaPage: React.FC = () => {
   const [cajaFile, setCajaFile] = useState<File | null>(null);
@@ -13,7 +14,6 @@ export const ImportacionCajaPage: React.FC = () => {
     setError(null);
     setResultado(null);
 
-    // ✔ SOLO obligamos el Excel de Caja
     if (!cajaFile) {
       setError("Debes seleccionar el Excel de Caja (ventas).");
       return;
@@ -25,30 +25,23 @@ export const ImportacionCajaPage: React.FC = () => {
       const formData = new FormData();
       formData.append("caja_excel", cajaFile);
 
-      // ✔ Servicios opcional
       if (serviciosFile) {
         formData.append("servicios_excel", serviciosFile);
       }
 
-      // ✔ Productos opcional
       if (productosFile) {
         formData.append("productos_excel", productosFile);
       }
 
-      const res = await fetch("/importar-caja/", {
-        method: "POST",
-        body: formData,
+      const res = await api.post("/importar-caja/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
-      if (!res.ok) {
-        throw new Error(`Error en la importación (${res.status})`);
-      }
-
-      const data = await res.json();
-      setResultado(data);
+      setResultado(res.data);
 
     } catch (err: any) {
-      setError(err.message || "Error desconocido al importar la caja.");
+      console.error(err);
+      setError("Error al importar la caja.");
     } finally {
       setLoading(false);
     }
@@ -166,34 +159,6 @@ export const ImportacionCajaPage: React.FC = () => {
               <span className="font-semibold">Movimientos histórico:</span>{" "}
               {resultado.resultado?.movimientos_historico ?? "-"}
             </p>
-
-            {resultado.resultado?.desconocidos?.length > 0 && (
-              <div className="mt-2">
-                <p className="font-semibold mb-1">Ítems desconocidos:</p>
-                <ul className="list-disc list-inside text-xs text-slate-300 max-h-40 overflow-auto">
-                  {resultado.resultado.desconocidos.map(
-                    (item: string, idx: number) => (
-                      <li key={idx}>{item}</li>
-                    )
-                  )}
-                </ul>
-              </div>
-            )}
-
-            {resultado.resultado?.errores?.length > 0 && (
-              <div className="mt-2">
-                <p className="font-semibold mb-1">Errores por ticket:</p>
-                <ul className="list-disc list-inside text-xs text-slate-300 max-h-40 overflow-auto">
-                  {resultado.resultado.errores.map(
-                    (err: any, idx: number) => (
-                      <li key={idx}>
-                        Ticket {err.ticket}: {err.error}
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            )}
           </div>
         )}
       </div>

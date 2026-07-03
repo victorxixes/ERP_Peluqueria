@@ -1,41 +1,45 @@
 import { useState } from "react";
 import { getIVAPrevision } from "../api/ivaApi";
 
-export default function PrevisionIVAPage() {
+export const PrevisionIVAPage = () => {
+  const [desde, setDesde] = useState("");
+  const [hasta, setHasta] = useState("");
   const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const cargar = async () => {
-    if (loading) return; // evita llamadas duplicadas
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await getIVAPrevision();
-      setData(res);
-    } catch (err) {
-      console.error(err);
-      setError("Error cargando la previsión de IVA");
-    }
-
-    setLoading(false);
+  const cargarPrevision = async () => {
+    const result = await getIVAPrevision(desde, hasta);
+    setData(result);
   };
 
   return (
-    <div>
+    <div style={{ padding: 20 }}>
       <h1>Previsión IVA</h1>
 
-      <button onClick={cargar} disabled={loading}>
-        {loading ? "Calculando..." : "Calcular"}
-      </button>
+      <div>
+        <label>Desde:</label>
+        <input
+          type="date"
+          value={desde}
+          onChange={(e) => setDesde(e.target.value)}
+        />
+      </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {loading && <p>Cargando...</p>}
+      <div>
+        <label>Hasta:</label>
+        <input
+          type="date"
+          value={hasta}
+          onChange={(e) => setHasta(e.target.value)}
+        />
+      </div>
+
+      <button onClick={cargarPrevision}>Cargar previsión</button>
 
       {data && (
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <pre style={{ marginTop: 20 }}>
+          {JSON.stringify(data, null, 2)}
+        </pre>
       )}
     </div>
   );
-}
+};

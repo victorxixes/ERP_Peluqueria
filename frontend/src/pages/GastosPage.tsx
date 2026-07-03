@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api } from "../utils/api";
+import  api  from "../utils/api";
 
 export const GastosPage = () => {
   const [gastos, setGastos] = useState<any[]>([]);

@@ -4,6 +4,7 @@
 
 .topbar-blocks {
   display: flex;
+  flex-wrap: wrap;
   gap: 14px;
   padding: 16px 24px;
   background: #0f172a; /* slate-900 */
@@ -21,6 +22,7 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: 0.25s ease;
+  text-decoration: none;
 }
 
 .topbar-item:hover {

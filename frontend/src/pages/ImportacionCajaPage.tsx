@@ -8,6 +8,7 @@ export const ImportacionCajaPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [resultado, setResultado] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const [dark, setDark] = useState(true);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,13 +26,8 @@ export const ImportacionCajaPage: React.FC = () => {
       const formData = new FormData();
       formData.append("caja_excel", cajaFile);
 
-      if (serviciosFile) {
-        formData.append("servicios_excel", serviciosFile);
-      }
-
-      if (productosFile) {
-        formData.append("productos_excel", productosFile);
-      }
+      if (serviciosFile) formData.append("servicios_excel", serviciosFile);
+      if (productosFile) formData.append("productos_excel", productosFile);
 
       const res = await api.post("/importar-caja/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -48,120 +44,115 @@ export const ImportacionCajaPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center">
-      <div className="w-full max-w-3xl bg-slate-900 border border-slate-700 rounded-xl p-8 shadow-xl">
-        <h1 className="text-2xl font-semibold tracking-wide mb-6">
-          Importación de Caja Mensual
-        </h1>
+    <div className={dark ? "page dark-mode" : "page light-mode"}>
 
-        <p className="text-sm text-slate-400 mb-6">
-          Sube el Excel de caja del mes. Los catálogos de servicios y productos son opcionales.
-        </p>
+      {/* Header */}
+      <div className="section flex justify-between items-center">
+        <div>
+          <h1 className="dashboard-title">Importación de Caja Mensual</h1>
+          <p className="text-muted">Sube el Excel de caja y reconstruye tickets, IVA y movimientos.</p>
+        </div>
 
+        <button
+          className="btn secondary"
+          onClick={() => setDark(!dark)}
+        >
+          {dark ? "Modo claro" : "Modo oscuro"}
+        </button>
+      </div>
+
+      {/* Formulario */}
+      <div className="form-card animate-fade">
         <form onSubmit={handleSubmit} className="space-y-6">
+
           {/* Caja */}
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Excel de Caja (ventas)
-            </label>
+            <label className="input-label">Excel de Caja (ventas)</label>
             <input
               type="file"
               accept=".xlsx,.xls"
               onChange={(e) => setCajaFile(e.target.files?.[0] || null)}
-              className="block w-full text-sm text-slate-200
-                         file:mr-4 file:py-2 file:px-4
-                         file:rounded-md file:border-0
-                         file:text-sm file:font-semibold
-                         file:bg-emerald-600 file:text-white
-                         hover:file:bg-emerald-500
-                         bg-slate-800 border border-slate-700 rounded-md"
+              className="input-file emerald"
             />
           </div>
 
-          {/* Servicios */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Servicios y Productos */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Catálogo de Servicios (Opcional)
-              </label>
+              <label className="input-label">Catálogo de Servicios (Opcional)</label>
               <input
                 type="file"
                 accept=".xlsx,.xls"
                 onChange={(e) => setServiciosFile(e.target.files?.[0] || null)}
-                className="block w-full text-sm text-slate-200
-                           file:mr-4 file:py-2 file:px-4
-                           file:rounded-md file:border-0
-                           file:text-sm file:font-semibold
-                           file:bg-sky-600 file:text-white
-                           hover:file:bg-sky-500
-                           bg-slate-800 border border-slate-700 rounded-md"
+                className="input-file sky"
               />
             </div>
 
-            {/* Productos */}
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Catálogo de Productos (Opcional)
-              </label>
+              <label className="input-label">Catálogo de Productos (Opcional)</label>
               <input
                 type="file"
                 accept=".xlsx,.xls"
                 onChange={(e) => setProductosFile(e.target.files?.[0] || null)}
-                className="block w-full text-sm text-slate-200
-                           file:mr-4 file:py-2 file:px-4
-                           file:rounded-md file:border-0
-                           file:text-sm file:font-semibold
-                           file:bg-indigo-600 file:text-white
-                           hover:file:bg-indigo-500
-                           bg-slate-800 border border-slate-700 rounded-md"
+                className="input-file indigo"
               />
             </div>
+
           </div>
 
           {/* Botón */}
-          <div className="flex items-center justify-between mt-4">
-            <button
-              type="submit"
-              disabled={loading}
-              className="inline-flex items-center px-6 py-2 rounded-md
-                         bg-emerald-600 hover:bg-emerald-500
-                         disabled:bg-slate-700 disabled:cursor-not-allowed
-                         text-sm font-semibold tracking-wide"
-            >
-              {loading ? "Importando..." : "Importar caja"}
-            </button>
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn primary w-full"
+          >
+            {loading ? "Importando…" : "Importar caja"}
+          </button>
 
-            {loading && (
-              <span className="text-xs text-slate-400">
-                Procesando tickets, IVA y histórico…
-              </span>
-            )}
-          </div>
+          {loading && (
+            <p className="loading-text">Procesando tickets, IVA y movimientos…</p>
+          )}
         </form>
-
-        {/* Errores */}
-        {error && (
-          <div className="mt-6 rounded-md border border-red-500 bg-red-950/40 p-4 text-sm">
-            <p className="font-semibold mb-1">Error en la importación</p>
-            <p>{error}</p>
-          </div>
-        )}
-
-        {/* Resultado */}
-        {resultado && (
-          <div className="mt-6 rounded-md border border-emerald-500 bg-emerald-950/40 p-4 text-sm space-y-2">
-            <p className="font-semibold mb-1">Resultado de la importación</p>
-            <p>
-              <span className="font-semibold">Tickets creados:</span>{" "}
-              {resultado.resultado?.tickets_creados ?? "-"}
-            </p>
-            <p>
-              <span className="font-semibold">Movimientos histórico:</span>{" "}
-              {resultado.resultado?.movimientos_historico ?? "-"}
-            </p>
-          </div>
-        )}
       </div>
+
+      {/* Error */}
+      {error && (
+        <div className="status-error animate-fade">
+          <p className="font-semibold">Error en la importación</p>
+          <p>{error}</p>
+        </div>
+      )}
+
+      {/* Resultado */}
+      {resultado && (
+        <div className="result-card animate-fade">
+
+          <h2 className="section-title mb-4">Resultado de la importación</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div className="result-box emerald">
+              <h3 className="result-title">Tickets creados</h3>
+              <p className="result-value">{resultado.resultado?.tickets_creados ?? "-"}</p>
+            </div>
+
+            <div className="result-box blue">
+              <h3 className="result-title">Movimientos histórico</h3>
+              <p className="result-value">{resultado.resultado?.movimientos_historico ?? "-"}</p>
+            </div>
+
+          </div>
+
+          {/* JSON opcional */}
+          <details className="json-details">
+            <summary className="json-summary">Ver JSON completo</summary>
+            <pre className="json-pre">
+              {JSON.stringify(resultado, null, 2)}
+            </pre>
+          </details>
+        </div>
+      )}
     </div>
   );
 };

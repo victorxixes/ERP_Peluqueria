@@ -5,8 +5,8 @@ const ValidacionItemsPage: React.FC = () => {
   const [clasificacion, setClasificacion] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
   const [mensaje, setMensaje] = useState<string | null>(null);
+  const [dark, setDark] = useState(true);
 
-  // Cargar ítems desconocidos desde el backend
   useEffect(() => {
     const cargar = async () => {
       const res = await fetch("/catalogo/desconocidos");
@@ -36,27 +36,36 @@ const ValidacionItemsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 p-8">
-      <h1 className="text-2xl font-semibold mb-6">Validación de Ítems Desconocidos</h1>
+    <div className={dark ? "page dark-mode" : "page light-mode"}>
 
-      <p className="text-slate-400 mb-6">
-        Estos ítems han aparecido en la importación de caja pero no existen en el catálogo.
-        Clasifícalos para que el sistema aprenda y no vuelvan a aparecer como desconocidos.
-      </p>
+      {/* Header */}
+      <div className="section flex justify-between items-center">
+        <div>
+          <h1 className="dashboard-title">Validación de Ítems</h1>
+          <p className="text-muted">Clasifica ítems desconocidos detectados en la importación de caja</p>
+        </div>
 
+        <button
+          className="btn secondary"
+          onClick={() => setDark(!dark)}
+        >
+          {dark ? "Modo claro" : "Modo oscuro"}
+        </button>
+      </div>
+
+      {/* Lista de ítems */}
       {items.length === 0 ? (
-        <p className="text-slate-500">No hay ítems desconocidos pendientes.</p>
+        <div className="status-card animate-fade">
+          No hay ítems desconocidos pendientes.
+        </div>
       ) : (
-        <div className="space-y-4">
+        <div className="items-card animate-fade">
           {items.map((item) => (
-            <div
-              key={item}
-              className="bg-slate-900 border border-slate-700 p-4 rounded-md flex items-center justify-between"
-            >
-              <span className="font-medium">{item}</span>
+            <div key={item} className="item-row">
+              <span className="item-name">{item}</span>
 
               <select
-                className="bg-slate-800 border border-slate-700 rounded px-3 py-1"
+                className="input"
                 value={clasificacion[item] || ""}
                 onChange={(e) => actualizarClasificacion(item, e.target.value)}
               >
@@ -69,18 +78,20 @@ const ValidacionItemsPage: React.FC = () => {
         </div>
       )}
 
+      {/* Botón guardar */}
       {items.length > 0 && (
         <button
           onClick={guardarCambios}
           disabled={loading}
-          className="mt-6 px-6 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-md font-semibold"
+          className="btn primary mt-6"
         >
           {loading ? "Guardando…" : "Guardar clasificación"}
         </button>
       )}
 
+      {/* Mensaje */}
       {mensaje && (
-        <div className="mt-4 p-4 bg-emerald-900/40 border border-emerald-600 rounded-md">
+        <div className="status-success animate-fade">
           {mensaje}
         </div>
       )}

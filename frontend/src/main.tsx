@@ -1,3 +1,6 @@
+import { Sidebar } from "../components/Sidebar";
+import { Topbar } from "../components/Topbar";
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { App } from "./App";

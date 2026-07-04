@@ -1,0 +1,38 @@
+/* ============================
+   TOPBAR BLOCKS – SaaS Premium 2026
+   ============================ */
+
+.topbar-blocks {
+  display: flex;
+  gap: 14px;
+  padding: 16px 24px;
+  background: #0f172a; /* slate-900 */
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.topbar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.06);
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.topbar-item:hover {
+  background: rgba(255,255,255,0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.topbar-item-icon {
+  font-size: 1.2rem;
+}
+
+.topbar-item-title {
+  font-weight: 500;
+}

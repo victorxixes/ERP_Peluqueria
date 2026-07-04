@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
+import api from "../utils/api";
+
 export const DashboardPage = () => {
   const [data, setData] = useState<any>(null);
-  const [dark, setDark] = useState(true);
 
   const cargar = async () => {
     const r = await api.get("/dashboard/");
@@ -20,20 +22,13 @@ export const DashboardPage = () => {
   }
 
   return (
-    <div className={dark ? "page dark-mode" : "page light-mode"}>
+    <div className="page light-mode">
       {/* Header */}
       <div className="section flex justify-between items-center">
         <div>
           <h1 className="dashboard-title">Dashboard Premium</h1>
           <p className="text-muted">Resumen fiscal y actividad del ERP</p>
         </div>
-
-        <button
-          className="btn secondary"
-          onClick={() => setDark(!dark)}
-        >
-          {dark ? "Modo claro" : "Modo oscuro"}
-        </button>
       </div>
 
       {/* Tarjetas principales */}

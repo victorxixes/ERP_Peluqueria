@@ -1,6 +1,8 @@
 /* ============================
    TOPBAR BLOCKS – SaaS Premium 2026
    ============================ */
+
+
 .topbar-blocks {
   display: flex;
   flex-wrap: wrap;
@@ -8,6 +10,9 @@
   padding: 16px 24px;
   background: #0f172a;
   border-bottom: 1px solid rgba(255,255,255,0.05);
+
+  /* 🔥 ESTO ES CLAVE: que sea horizontal */
+  width: 100%;
 }
 
 .topbar-item {

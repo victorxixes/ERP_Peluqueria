@@ -3,10 +3,15 @@ import { useState } from "react";
 export const ValidacionExcelPage = () => {
   const [tipo, setTipo] = useState<"ingresos" | "gastos">("ingresos");
   const [resultado, setResultado] = useState<any | null>(null);
+  const [dark, setDark] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const onChangeFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    setLoading(true);
+    setResultado(null);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -18,63 +23,87 @@ export const ValidacionExcelPage = () => {
 
     const data = await res.json();
     setResultado(data);
+    setLoading(false);
   };
 
   return (
-    <div className="p-10 bg-white text-black min-h-screen space-y-10">
+    <div className={dark ? "page dark-mode" : "page light-mode"}>
 
-      {/* Título */}
-      <div>
-        <h1 className="text-4xl font-bold">Validación de Excel</h1>
-        <p className="text-gray-600 mt-1">Comprueba errores y estructura de tus archivos Excel</p>
+      {/* Header */}
+      <div className="section flex justify-between items-center">
+        <div>
+          <h1 className="dashboard-title">Validación de Excel</h1>
+          <p className="text-muted">Comprueba errores y estructura de tus archivos Excel</p>
+        </div>
+
+        <button
+          className="btn secondary"
+          onClick={() => setDark(!dark)}
+        >
+          {dark ? "Modo claro" : "Modo oscuro"}
+        </button>
       </div>
 
       {/* Selector + Input */}
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6 space-y-4">
+      <div className="form-card animate-fade">
 
-        <div className="flex gap-4 items-center">
-          <select
-            className="p-2 border border-gray-300 rounded-lg bg-white"
-            value={tipo}
-            onChange={(e) => setTipo(e.target.value as any)}
-          >
-            <option value="ingresos">Ingresos</option>
-            <option value="gastos">Gastos</option>
-          </select>
+        <h2 className="section-title mb-4">Subir archivo</h2>
 
-          <input
-            type="file"
-            accept=".xlsx,.xls"
-            className="p-2 border border-gray-300 rounded-lg bg-white"
-            onChange={onChangeFile}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div className="flex flex-col">
+            <label className="input-label">Tipo de documento</label>
+            <select
+              className="input"
+              value={tipo}
+              onChange={(e) => setTipo(e.target.value as any)}
+            >
+              <option value="ingresos">Ingresos</option>
+              <option value="gastos">Gastos</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col">
+            <label className="input-label">Archivo Excel</label>
+            <input
+              type="file"
+              accept=".xlsx,.xls"
+              className="input"
+              onChange={onChangeFile}
+            />
+          </div>
+
         </div>
 
-        <p className="text-gray-500 text-sm">
-          Selecciona el tipo de documento y sube tu archivo Excel para validar columnas, duplicados y valores incorrectos.
+        <p className="text-muted mt-4 text-sm">
+          Valida columnas obligatorias, duplicados y valores incorrectos.
         </p>
+
+        {loading && (
+          <p className="loading-text mt-4">Validando archivo…</p>
+        )}
       </div>
 
       {/* Resultado */}
       {resultado && (
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6 space-y-6">
+        <div className="result-card animate-fade">
 
-          <h2 className="text-2xl font-semibold">Resultado de la validación</h2>
+          <h2 className="section-title mb-4">Resultado de la validación</h2>
 
           {/* Resumen */}
-          <div className="p-4 border border-gray-200 rounded-lg shadow-sm">
-            <p className="text-lg font-semibold">Filas detectadas:</p>
-            <p className="text-gray-700">{resultado.filas}</p>
+          <div className="iva-box blue mb-6">
+            <h3 className="iva-title">Filas detectadas</h3>
+            <p className="iva-value">{resultado.filas}</p>
           </div>
 
           {/* Errores */}
-          <div className="p-4 border border-gray-200 rounded-lg shadow-sm">
-            <p className="text-lg font-semibold mb-2">Errores encontrados:</p>
+          <div className="p-4 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800">
+            <p className="text-lg font-semibold mb-2">Errores encontrados</p>
 
             {resultado.errores.length === 0 ? (
               <p className="text-green-600 font-semibold">No se han encontrado errores.</p>
             ) : (
-              <ul className="list-disc ml-5 text-gray-700">
+              <ul className="list-disc ml-5 text-gray-700 dark:text-gray-300">
                 {resultado.errores.map((err: string, idx: number) => (
                   <li key={idx}>{err}</li>
                 ))}

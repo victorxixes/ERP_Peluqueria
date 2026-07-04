@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import  api  from "../utils/api";
+import api from "../utils/api";
 
 export const InformesPage = () => {
   const [informes, setInformes] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dark, setDark] = useState(true);
 
   const cargar = async () => {
     if (loading) return;
@@ -29,152 +30,110 @@ export const InformesPage = () => {
   // -----------------------------
   // BOTONES DE CIERRE FISCAL
   // -----------------------------
-  const generarCierreMensual = async () => {
+  const generar = async (endpoint: string, body: any, mensajeError: string) => {
     if (loading) return;
     setLoading(true);
     setError(null);
 
     try {
-      await api.post("/informes/generar-cierre-mensual", {
-        year: 2026,
-        month: 6,
-      });
-      cargar(); // refresca la tabla
-    } catch (err) {
-      console.error(err);
-      setError("Error generando cierre mensual");
-    }
-
-    setLoading(false);
-  };
-
-  const generarCierreTrimestral = async () => {
-    if (loading) return;
-    setLoading(true);
-    setError(null);
-
-    try {
-      await api.post("/informes/generar-cierre-trimestral", {
-        year: 2026,
-        quarter: 2,
-      });
+      await api.post(endpoint, body);
       cargar();
     } catch (err) {
       console.error(err);
-      setError("Error generando cierre trimestral");
-    }
-
-    setLoading(false);
-  };
-
-  const generarCierreAnual = async () => {
-    if (loading) return;
-    setLoading(true);
-    setError(null);
-
-    try {
-      await api.post("/informes/generar-cierre-anual", {
-        year: 2026,
-      });
-      cargar();
-    } catch (err) {
-      console.error(err);
-      setError("Error generando cierre anual");
-    }
-
-    setLoading(false);
-  };
-
-  const generarModelo390 = async () => {
-    if (loading) return;
-    setLoading(true);
-    setError(null);
-
-    try {
-      await api.post("/informes/generar-modelo-390", {
-        year: 2026,
-      });
-      cargar();
-    } catch (err) {
-      console.error(err);
-      setError("Error generando Modelo 390");
-    }
-
-    setLoading(false);
-  };
-
-  const generarPrevisionIVA = async () => {
-    if (loading) return;
-    setLoading(true);
-    setError(null);
-
-    try {
-      await api.post("/informes/generar-prevision-iva", {
-        year: 2026,
-        month: 6,
-      });
-      cargar();
-    } catch (err) {
-      console.error(err);
-      setError("Error generando previsión de IVA");
+      setError(mensajeError);
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="p-10 bg-white text-black min-h-screen space-y-10">
+    <div className={dark ? "page dark-mode" : "page light-mode"}>
 
-      <h1 className="text-4xl font-bold">Informes</h1>
-      <p className="text-gray-600">Generación y descarga de informes</p>
+      {/* Header */}
+      <div className="section flex justify-between items-center">
+        <div>
+          <h1 className="dashboard-title">Informes</h1>
+          <p className="text-muted">Generación y descarga de informes fiscales</p>
+        </div>
 
-      {loading && <p>Cargando...</p>}
-      {error && <p className="text-red-600">{error}</p>}
+        <button
+          className="btn secondary"
+          onClick={() => setDark(!dark)}
+        >
+          {dark ? "Modo claro" : "Modo oscuro"}
+        </button>
+      </div>
+
+      {/* Estado */}
+      {loading && (
+        <div className="status-card animate-fade">
+          <p>Cargando informes…</p>
+        </div>
+      )}
+
+      {error && (
+        <div className="status-error animate-fade">
+          <p className="font-semibold">Error</p>
+          <p>{error}</p>
+        </div>
+      )}
 
       {/* BOTONES DE CIERRE FISCAL */}
-      <div className="flex gap-4 flex-wrap">
+      <div className="fiscal-buttons animate-fade">
         <button
-          onClick={generarCierreMensual}
-          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+          className="btn fiscal green"
+          onClick={() =>
+            generar("/informes/generar-cierre-mensual", { year: 2026, month: 6 }, "Error generando cierre mensual")
+          }
         >
-          Generar cierre mensual
+          Cierre mensual
         </button>
 
         <button
-          onClick={generarCierreTrimestral}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="btn fiscal blue"
+          onClick={() =>
+            generar("/informes/generar-cierre-trimestral", { year: 2026, quarter: 2 }, "Error generando cierre trimestral")
+          }
         >
-          Generar cierre trimestral
+          Cierre trimestral
         </button>
 
         <button
-          onClick={generarCierreAnual}
-          className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+          className="btn fiscal purple"
+          onClick={() =>
+            generar("/informes/generar-cierre-anual", { year: 2026 }, "Error generando cierre anual")
+          }
         >
-          Generar cierre anual
+          Cierre anual
         </button>
 
         <button
-          onClick={generarModelo390}
-          className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+          className="btn fiscal orange"
+          onClick={() =>
+            generar("/informes/generar-modelo-390", { year: 2026 }, "Error generando Modelo 390")
+          }
         >
-          Generar Modelo 390
+          Modelo 390
         </button>
 
         <button
-          onClick={generarPrevisionIVA}
-          className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800"
+          className="btn fiscal gray"
+          onClick={() =>
+            generar("/informes/generar-prevision-iva", { year: 2026, month: 6 }, "Error generando previsión IVA")
+          }
         >
-          Generar Previsión IVA
+          Previsión IVA
         </button>
       </div>
 
       {/* TABLA DE INFORMES */}
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
-        <table className="w-full text-left">
+      <div className="table-container animate-fade">
+        <h2 className="section-title mb-4">Informes generados</h2>
+
+        <table className="table">
           <thead>
-            <tr className="border-b border-gray-300 text-gray-600">
-              <th className="py-2">Nombre</th>
+            <tr>
+              <th>Nombre</th>
               <th>Fecha</th>
               <th>Acciones</th>
             </tr>
@@ -182,13 +141,13 @@ export const InformesPage = () => {
 
           <tbody>
             {informes.map((i) => (
-              <tr key={i.id} className="border-b border-gray-200 hover:bg-gray-50">
-                <td className="py-2">{i.nombre}</td>
+              <tr key={i.id}>
+                <td>{i.nombre}</td>
                 <td>{i.fecha}</td>
                 <td>
                   <a
                     href={`http://localhost:8000/informes/${i.id}`}
-                    className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    className="btn small primary"
                   >
                     Descargar
                   </a>

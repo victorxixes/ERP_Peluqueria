@@ -11,14 +11,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a {
+/* SOLO afecta a enlaces dentro de contenido, NO al Sidebar */
+.page a {
   color: #2563eb;
   text-decoration: none;
   transition: 0.2s;
 }
-a:hover {
+
+.page a:hover {
   color: #1e40af;
 }
+
 
 .container {
   max-width: 1200px;

@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-import api from "../utils/api";
-
 export const DashboardPage = () => {
   const [data, setData] = useState<any>(null);
   const [dark, setDark] = useState(true);

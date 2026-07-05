@@ -25,29 +25,28 @@ import { ImportacionCajaPage } from "./pages/ImportacionCajaPage";
 export const App = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/ingresos" element={<IngresosPage />} />
-          <Route path="/gastos" element={<GastosPage />} />
-          <Route path="/proveedores" element={<ProveedoresPage />} />
-          <Route path="/activos" element={<ActivosPage />} />
-          <Route path="/nominas" element={<NominasPage />} />
-          <Route path="/usuarios" element={<UsuariosPage />} />
-          <Route path="/logs" element={<LogsPage />} />
-          <Route path="/historico" element={<HistoricoPage />} />
-          <Route path="/informes" element={<InformesPage />} />
-          <Route path="/configuracion-fiscal" element={<ConfiguracionFiscalPage />} />
-          <Route path="/prevision-iva" element={<PrevisionIVAPage />} />
-          <Route path="/iva" element={<IVAPage />} />
-          <Route path="/iva-anual" element={<IVAAnualPage />} />
-          <Route path="/irpf" element={<IRPFPage />} />
-          <Route path="/ia-fiscal" element={<IAFiscalPage />} />
-          <Route path="/validacion-excel" element={<ValidacionExcelPage />} />
-          <Route path="/backup" element={<BackupPage />} />
-          <Route path="/importacion-caja" element={<ImportacionCajaPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
-};
+  <Routes>
+    <Route element={<Layout />}>
+      <Route path="/" element={<DashboardPage />} />
+      <Route path="/ingresos" element={<IngresosPage />} />
+      <Route path="/gastos" element={<GastosPage />} />
+      <Route path="/proveedores" element={<ProveedoresPage />} />
+      <Route path="/activos" element={<ActivosPage />} />
+      <Route path="/nominas" element={<NominasPage />} />
+      <Route path="/usuarios" element={<UsuariosPage />} />
+      <Route path="/logs" element={<LogsPage />} />
+      <Route path="/historico" element={<HistoricoPage />} />
+      <Route path="/informes" element={<InformesPage />} />
+      <Route path="/configuracion-fiscal" element={<ConfiguracionFiscalPage />} />
+      <Route path="/prevision-iva" element={<PrevisionIVAPage />} />
+      <Route path="/iva" element={<IVAPage />} />
+      <Route path="/iva-anual" element={<IVAAnualPage />} />
+      <Route path="/irpf" element={<IRPFPage />} />
+      <Route path="/ia-fiscal" element={<IAFiscalPage />} />
+      <Route path="/validacion-excel" element={<ValidacionExcelPage />} />
+      <Route path="/backup" element={<BackupPage />} />
+      <Route path="/importacion-caja" element={<ImportacionCajaPage />} />
+    </Route>
+  </Routes>
+</BrowserRouter>
+

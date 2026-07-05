@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import { Layout } from "./layout/Layout";
+
 import { DashboardPage } from "./pages/DashboardPage";
 import { IngresosPage } from "./pages/IngresosPage";
 import { GastosPage } from "./pages/GastosPage";
@@ -20,13 +22,11 @@ import { LogsPage } from "./pages/LogsPage";
 import { BackupPage } from "./pages/BackupPage";
 import { ImportacionCajaPage } from "./pages/ImportacionCajaPage";
 
-import { Layout } from "./layout/Layout";
-
 export const App = () => {
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
+      <Routes>
+        <Route element={<Layout />}>
           <Route path="/" element={<DashboardPage />} />
 
           <Route path="/ingresos" element={<IngresosPage />} />
@@ -51,8 +51,8 @@ export const App = () => {
           <Route path="/validacion-excel" element={<ValidacionExcelPage />} />
           <Route path="/backup" element={<BackupPage />} />
           <Route path="/importacion-caja" element={<ImportacionCajaPage />} />
-        </Routes>
-      </Layout>
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 };

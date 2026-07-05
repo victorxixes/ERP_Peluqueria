@@ -7,11 +7,8 @@ export const Layout = ({ children }: { children: any }) => {
       {/* Sidebar fijo a la izquierda */}
       <Sidebar />
 
-      {/* Contenido + topbar */}
+      {/* Contenido */}
       <div className="flex-1 flex flex-col">
-        
-        {/* Menú horizontal arriba */}
-        <TopbarBlocks />
 
         <main className="flex-1 p-8 overflow-y-auto">
           {children}
@@ -21,5 +18,6 @@ export const Layout = ({ children }: { children: any }) => {
     </div>
   );
 };
+
 
 

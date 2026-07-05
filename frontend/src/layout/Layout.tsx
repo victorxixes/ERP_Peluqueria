@@ -1,5 +1,4 @@
 import { Sidebar } from "../components/Sidebar";
-import { TopbarBlocks } from "../components/TopbarBlocks";
 
 export const Layout = ({ children }: { children: any }) => {
   return (

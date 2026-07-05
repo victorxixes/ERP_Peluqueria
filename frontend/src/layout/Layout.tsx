@@ -1,6 +1,7 @@
 import { Sidebar } from "../components/Sidebar";
+import { Outlet } from "react-router-dom";
 
-export const Layout = ({ children }: { children: any }) => {
+export const Layout = () => {
   return (
     <div className="min-h-screen flex bg-slate-900 text-slate-200">
 
@@ -8,13 +9,14 @@ export const Layout = ({ children }: { children: any }) => {
 
       <div className="flex-1 flex flex-col">
         <main className="flex-1 p-8 overflow-y-auto">
-          {children}
+          <Outlet />   {/* 🔥 AQUÍ SE RENDERIZAN TUS PÁGINAS */}
         </main>
       </div>
 
     </div>
   );
 };
+
 
 
 

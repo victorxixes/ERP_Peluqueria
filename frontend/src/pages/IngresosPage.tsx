@@ -15,7 +15,7 @@ export const IngresosPage = () => {
   });
 
   const cargar = async () => {
-    const r = await api.get("/ingresos");
+    const r = await api.get("/ingresos/");
     setIngresos(r.data);
   };
 

@@ -42,17 +42,17 @@ from routers.informes import router as informes_router
 from routers.prevision_iva import router as prevision_iva_router
 from routers.cierre_fiscal import router as cierre_fiscal_router
 
-# Routers adicionales
-from routers import iva
-from routers import proveedores
-from routers import usuarios
-from routers import servicios
-from routers import productos
-from routers import gastos
-from routers import ingresos
-from routers import nominas
-from routers import activos
-from routers import auth
+# Routers adicionales (CORREGIDOS)
+from routers.iva import router as iva_router
+from routers.proveedores import router as proveedores_router
+from routers.usuarios import router as usuarios_router
+from routers.servicios import router as servicios_router
+from routers.productos import router as productos_router
+from routers.gastos import router as gastos_router
+from routers.ingresos import router as ingresos_router
+from routers.nominas import router as nominas_router
+from routers.activos import router as activos_router
+from routers.auth import router as auth_router
 
 # ============================
 # APP
@@ -76,7 +76,7 @@ app.add_middleware(
 app.include_router(importar_caja_router)
 app.include_router(catalogo_router)
 app.include_router(irpf_router)
-app.include_router(iva)
+app.include_router(iva_router)  # ✔ CORREGIDO
 app.include_router(dashboard_router)
 app.include_router(logs_router)
 app.include_router(historico_router)
@@ -89,13 +89,12 @@ app.include_router(informes_router)
 app.include_router(prevision_iva_router)
 app.include_router(cierre_fiscal_router)
 
-
-app.include_router(proveedores.router)
-app.include_router(usuarios.router)
-app.include_router(servicios.router)
-app.include_router(productos.router)
-app.include_router(gastos.router)
-app.include_router(ingresos.router)
-app.include_router(nominas.router)
-app.include_router(activos.router)
-app.include_router(auth.router)
+app.include_router(proveedores_router)
+app.include_router(usuarios_router)
+app.include_router(servicios_router)
+app.include_router(productos_router)
+app.include_router(gastos_router)
+app.include_router(ingresos_router)
+app.include_router(nominas_router)
+app.include_router(activos_router)
+app.include_router(auth_router)

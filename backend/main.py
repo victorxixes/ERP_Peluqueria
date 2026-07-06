@@ -2,7 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from db import Base, engine
 
-# IMPORTA TODOS LOS MODELOS ANTES DE CREAR TABLAS
+# ============================
+# IMPORTA TODOS LOS MODELOS REALES
+# ============================
 from models.usuario import Usuario
 from models.proveedor import Proveedor
 from models.producto import Producto
@@ -11,25 +13,20 @@ from models.gasto import Gasto
 from models.activo import Activo
 from models.ingreso import Ingreso
 from models.log import Log
-
-# IMPORTA LOS MODELOS QUE FALTAN
 from models.nomina import Nomina
 from models.irpf_prevision import IRPFPrevision
-from models.iva_prevision import IVAPrevision
-from models.iva_resumen import IVAPeriodoResumen
+from models.iva_resumen import IVAResumen
 from models.servicio import Servicio
-from models.categoria import Categoria
-from models.aprendizaje_items import AprendizajeItem
-from models.modelo_390 import Modelo390
-from models.cierre_fiscal import CierreFiscal
-from models.configuracion_fiscal import ConfiguracionFiscal
+from models.informes import Informe
 
-
-# Crear tablas (solo temporal)
+# Crear tablas
 Base.metadata.create_all(bind=engine)
 
-# Routers
-# Routers que ya estaban importados
+# ============================
+# IMPORTA TODOS LOS ROUTERS
+# ============================
+
+# Routers principales
 from routers.importar_caja import router as importar_caja_router
 from routers.catalogo import router as catalogo_router
 from routers.irpf import router as irpf_router
@@ -45,7 +42,7 @@ from routers.informes import router as informes_router
 from routers.prevision_iva import router as prevision_iva_router
 from routers.cierre_fiscal import router as cierre_fiscal_router
 
-# Routers que estaban desactivados y AHORA sí deben importarse
+# Routers adicionales
 from routers import iva
 from routers import proveedores
 from routers import usuarios
@@ -57,12 +54,13 @@ from routers import nominas
 from routers import activos
 from routers import auth
 
+# ============================
+# APP
+# ============================
 
 app = FastAPI()
 
-# ============================
-# CORS — IMPRESCINDIBLE
-# ============================
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://erp-peluqueria-front.onrender.com"],
@@ -72,8 +70,9 @@ app.add_middleware(
 )
 
 # ============================
-# Routers ACTIVOS
+# MONTAR ROUTERS
 # ============================
+
 app.include_router(importar_caja_router)
 app.include_router(catalogo_router)
 app.include_router(irpf_router)
@@ -88,6 +87,7 @@ app.include_router(modelo_390_router)
 app.include_router(informes_router)
 app.include_router(prevision_iva_router)
 app.include_router(cierre_fiscal_router)
+
 app.include_router(iva.router)
 app.include_router(proveedores.router)
 app.include_router(usuarios.router)

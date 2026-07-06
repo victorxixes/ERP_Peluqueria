@@ -36,16 +36,16 @@ class Ticket(Base):
     __tablename__ = "tickets"
 
     id = Column(Integer, primary_key=True, index=True)
-    ticket_codigo = Column(String, unique=True, index=True)
-    fecha_venta = Column(DateTime, index=True)
-    cliente = Column(String, index=True)
-    empleado = Column(String, index=True)
-    total_base = Column(Float)
-    total_iva = Column(Float)
-    total_ticket = Column(Float)
-    forma_pago = Column(String)
+    ticket_codigo = Column(String, unique=True, index=True, nullable=False)
+    fecha_venta = Column(DateTime, index=True, nullable=True)
+    cliente = Column(String, index=True, nullable=True)
+    empleado = Column(String, index=True, nullable=True)
+    total_base = Column(Float, nullable=True)
+    total_iva = Column(Float, nullable=True)
+    total_ticket = Column(Float, nullable=True)
+    forma_pago = Column(String, nullable=True)
 
-    movimientos = relationship("MovimientoCaja", back_populates="ticket")
+    movimientos = relationship("MovimientoCaja", back_populates="ticket", lazy="joined")
 
 
 class MovimientoCaja(Base):
@@ -54,18 +54,18 @@ class MovimientoCaja(Base):
     id = Column(Integer, primary_key=True, index=True)
     ticket_id = Column(Integer, ForeignKey("tickets.id"), index=True)
 
-    fecha_venta = Column(DateTime, index=True)
-    cliente = Column(String, index=True)
-    empleado = Column(String, index=True)
+    fecha_venta = Column(DateTime, index=True, nullable=True)
+    cliente = Column(String, index=True, nullable=True)
+    empleado = Column(String, index=True, nullable=True)
 
-    concepto = Column(String, index=True)
-    categoria = Column(String, index=True)
+    concepto = Column(String, index=True, nullable=True)
+    categoria = Column(String, index=True, nullable=True)
 
-    cantidad = Column(Float)
-    subtotal = Column(Float)
-    iva_porcentaje = Column(String)
-    iva_cuota = Column(Float)
-    descuento = Column(Float)
-    total_linea = Column(Float)
+    cantidad = Column(Float, nullable=True)
+    subtotal = Column(Float, nullable=True)
+    iva_porcentaje = Column(String, nullable=True)
+    iva_cuota = Column(Float, nullable=True)
+    descuento = Column(Float, nullable=True)
+    total_linea = Column(Float, nullable=True)
 
-    ticket = relationship("Ticket", back_populates="movimientos")
+    ticket = relationship("Ticket", back_populates="movimientos", lazy="joined")

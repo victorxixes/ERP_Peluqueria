@@ -1,25 +1,16 @@
-/* 🔥 FORZAMOS el layout para que NADA lo rompa */
-.layout-container {
-  display: flex !important;
-  flex-direction: row !important;
-  min-height: 100vh !important;
-  width: 100% !important;
-  background-color: #ffffff !important; /* FONDO BLANCO */
-  color: #000000 !important; /* TEXTO NEGRO */
-}
-
-/* 🔥 Sidebar SIEMPRE a la izquierda */
-
-
 .layout-container {
   display: flex;
+  flex-direction: row;
   min-height: 100vh;
-  background: #f7f8fa;
+  width: 100%;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 .layout-content {
   flex: 1;
-  padding: 20px 30px; /* antes 32px o más → demasiado grande */
+  padding: 20px 30px;
   margin: 0;
 }
+
 

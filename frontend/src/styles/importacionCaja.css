@@ -63,28 +63,37 @@
   margin-bottom: 0.3rem;
 }
 
+/* FIX DEFINITIVO INPUT FILE */
 .input-file {
   width: 100%;
-  padding: 0.7rem;
-  border-radius: 8px;
   border: 1px solid #475569;
+  border-radius: 8px;
   background: #1e293b;
   color: white;
+  padding: 0; /* IMPORTANTE */
 }
 
+/* Botón del input file */
+.input-file::file-selector-button {
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: #475569;
+  color: white;
+  cursor: pointer;
+}
+
+/* Variantes */
 .input-file.emerald::file-selector-button {
   background: #10b981;
-  color: white;
 }
 
 .input-file.sky::file-selector-button {
   background: #0ea5e9;
-  color: white;
 }
 
 .input-file.indigo::file-selector-button {
   background: #6366f1;
-  color: white;
 }
 
 .loading-text {

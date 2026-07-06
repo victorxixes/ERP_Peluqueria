@@ -21,3 +21,16 @@ input:focus, select:focus, textarea:focus {
 .form-group {
   margin-bottom: 20px;
 }
+/* FIX para inputs de archivo */
+input[type="file"] {
+  all: unset;
+  display: block !important;
+  width: auto !important;
+  padding: 8px !important;
+  border: 1px solid #d1d5db !important;
+  background: #f9fafb !important;
+  border-radius: 8px !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  position: relative !important;
+}

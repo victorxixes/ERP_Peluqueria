@@ -1,0 +1,15 @@
+aside {
+  user-select: none;
+}
+
+aside h2 {
+  margin-bottom: 1rem;
+}
+
+aside a {
+  font-size: 0.95rem;
+}
+
+aside a:hover {
+  transform: translateX(2px);
+}

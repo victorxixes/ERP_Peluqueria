@@ -1,0 +1,159 @@
+/* Página */
+.page {
+  min-height: 100vh;
+  padding: 2.5rem;
+  font-family: "Inter", sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.dashboard-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.text-muted {
+  color: #94a3b8;
+}
+
+/* Botones */
+.btn {
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn.secondary {
+  background: transparent;
+  border: 1px solid #94a3b8;
+  color: #94a3b8;
+}
+
+.btn.secondary:hover {
+  background: #94a3b8;
+  color: #0f172a;
+}
+
+/* Filtros */
+.filters-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.input-label {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 0.3rem;
+}
+
+.input {
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: white;
+  transition: border 0.2s ease;
+}
+
+.input:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+/* Tabla */
+.table-container {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  padding: 2rem;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  padding-bottom: 0.8rem;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.table td {
+  padding: 0.6rem 0;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.table tr:hover td {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+/* Tags */
+.tag {
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.tag-blue {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+/* Details */
+.details-summary {
+  cursor: pointer;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.details-pre {
+  margin-top: 1rem;
+  background: #f1f5f9;
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  overflow-x: auto;
+}
+
+/* Animación */
+.animate-fade {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modo oscuro */
+.dark-mode {
+  background: #0f172a;
+  color: white;
+}
+
+.dark-mode .filters-card,
+.dark-mode .table-container {
+  background: #1e293b;
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+.dark-mode .input {
+  background: #334155;
+  border-color: #475569;
+  color: white;
+}
+
+.dark-mode .details-pre {
+  background: #334155;
+  color: #e2e8f0;
+}

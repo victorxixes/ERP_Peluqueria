@@ -1,0 +1,130 @@
+/* Página */
+.page {
+  min-height: 100vh;
+  padding: 2.5rem;
+  transition: background 0.3s ease, color 0.3s ease;
+  font-family: "Inter", sans-serif;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.dashboard-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.text-muted {
+  color: #94a3b8;
+}
+
+/* Botones */
+.btn {
+  border-radius: 10px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn.primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn.primary:hover {
+  background: #1d4ed8;
+}
+
+.btn.secondary {
+  background: transparent;
+  border: 1px solid #94a3b8;
+  color: #94a3b8;
+}
+
+.btn.secondary:hover {
+  background: #94a3b8;
+  color: #0f172a;
+}
+
+/* Estado */
+.status-card {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+/* Tarjeta de configuración */
+.config-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1rem;
+  padding: 2rem;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* Inputs */
+.input-label {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 0.3rem;
+}
+
+.input {
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: white;
+  transition: border 0.2s ease;
+}
+
+.input:focus {
+  border-color: #2563eb;
+  outline: none;
+}
+
+/* Animación */
+.animate-fade {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Modo oscuro */
+.dark-mode {
+  background: #0f172a;
+  color: white;
+}
+
+.dark-mode .config-card {
+  background: #1e293b;
+  border-color: rgba(148, 163, 184, 0.4);
+}
+
+.dark-mode .input {
+  background: #334155;
+  border-color: #475569;
+  color: white;
+}
+
+.dark-mode .input-label {
+  color: #cbd5e1;
+}
+
+.dark-mode .status-card {
+  background: rgba(56, 189, 248, 0.25);
+  border-color: rgba(56, 189, 248, 0.5);
+}

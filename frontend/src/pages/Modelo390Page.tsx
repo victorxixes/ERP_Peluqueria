@@ -7,19 +7,19 @@ export default function Modelo390Page() {
   const [loading, setLoading] = useState(false);
   const [dark, setDark] = useState(true);
 
-  const cargar = async () => {
-    if (loading) return;
-    setLoading(true);
+const cargar = async () => {
+  if (loading) return;
+  setLoading(true);
 
-    try {
-     const res = await api.get(`/modelo-390?year=${year}`);
-      setData(res.data);
-    } catch (err) {
-      console.error(err);
-    }
+  try {
+    const res = await api.get(`/modelo-390?year=${year}`);
+    setData(res.data);
+  } catch (err) {
+    console.error(err);
+  }
 
-    setLoading(false);
-  };
+  setLoading(false);
+};
 
   return (
     <div className={dark ? "page dark-mode" : "page light-mode"}>

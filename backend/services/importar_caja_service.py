@@ -11,8 +11,16 @@ from models.historico import Ticket, MovimientoCaja
 # UTILIDADES
 # ---------------------------------------------------------
 
+def _normalize(s: str) -> str:
+    """Normaliza cabeceras: minúsculas, sin tildes, sin espacios."""
+    if not s:
+        return ""
+    s = s.strip().lower()
+    s = s.replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
+    return s
+
+
 def _to_float(v):
-    """Convierte valores Excel a float de forma segura."""
     if v is None:
         return 0.0
     if isinstance(v, str):
@@ -24,7 +32,6 @@ def _to_float(v):
 
 
 def _to_date(v):
-    """Convierte fechas Excel a datetime."""
     if isinstance(v, datetime):
         return v
     if isinstance(v, float):  # número de serie Excel
@@ -33,12 +40,12 @@ def _to_date(v):
 
 
 # ---------------------------------------------------------
-# LECTURA DEL EXCEL DETALLADO
+# LECTURA DEL EXCEL
 # ---------------------------------------------------------
 
 def _leer_hoja_principal(excel_file: UploadFile):
     contenido = excel_file.file.read()
-    excel_file.file.seek(0)  # ← CRÍTICO: permite relecturas
+    excel_file.file.seek(0)
     wb = load_workbook(BytesIO(contenido), data_only=True)
     ws = wb[wb.sheetnames[0]]
     return ws
@@ -47,15 +54,14 @@ def _leer_hoja_principal(excel_file: UploadFile):
 def _mapear_cabeceras(ws) -> Dict[str, int]:
     cabeceras = {}
     for idx, cell in enumerate(ws[1], start=1):
-        nombre = str(cell.value).strip().lower() if cell.value else ""
-        nombre = nombre.replace("í", "i")  # ← normalización
+        nombre = _normalize(str(cell.value)) if cell.value else ""
         if nombre:
             cabeceras[nombre] = idx
     return cabeceras
 
 
 # ---------------------------------------------------------
-# IMPORTADOR DETALLADO (GUARDA EN BD)
+# IMPORTADOR DETALLADO
 # ---------------------------------------------------------
 
 def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
@@ -65,11 +71,21 @@ def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
 
         print("CABECERAS DETECTADAS:", cabeceras)
 
-        # Columnas necesarias (normalizadas)
+        # Columnas necesarias según tu Excel REAL
         required = [
-            "ticket", "fecha venta", "cliente", "empleado",
-            "concepto", "categoria", "cantidad",
-            "subtotal", "impuesto", "cuota", "descuento", "total"
+            "ticket",
+            "fecha venta",
+            "cliente",
+            "empleado",
+            "concepto",
+            "categoria",
+            "cantidad",
+            "subtotal",
+            "impuesto",
+            "cuota",
+            "descuento",
+            "total",
+            "forma de pago"
         ]
 
         missing = [col for col in required if col not in cabeceras]
@@ -80,31 +96,19 @@ def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
                 "cabeceras_detectadas": list(cabeceras.keys())
             }
 
-        col_ticket       = cabeceras["ticket"]
-        col_fecha_venta  = cabeceras["fecha venta"]
-        col_cliente      = cabeceras["cliente"]
-        col_empleado     = cabeceras["empleado"]
-        col_concepto     = cabeceras["concepto"]
-        col_categoria    = cabeceras["categoria"]
-        col_cantidad     = cabeceras["cantidad"]
-        col_subtotal     = cabeceras["subtotal"]
-        col_impuesto     = cabeceras["impuesto"]
-        col_cuota        = cabeceras["cuota"]
-        col_descuento    = cabeceras["descuento"]
-        col_total        = cabeceras["total"]
-        col_forma_pago   = cabeceras.get("forma de pago")
+        # Asignación de columnas
+        col = {c: cabeceras[c] for c in required}
 
-        formas_pago_por_ticket: Dict[str, str] = {}
         tickets_cache: Dict[str, Ticket] = {}
         movimientos_count = 0
 
         # ---------------------------------------------------------
-        # RECORRER TODAS LAS FILAS DEL EXCEL
+        # RECORRER TODAS LAS FILAS
         # ---------------------------------------------------------
 
         for row_idx in range(2, ws.max_row + 1):
-            ticket_val = ws.cell(row=row_idx, column=col_ticket).value
-            concepto = ws.cell(row=row_idx, column=col_concepto).value
+            ticket_val = ws.cell(row=row_idx, column=col["ticket"]).value
+            concepto = ws.cell(row=row_idx, column=col["concepto"]).value
 
             if ticket_val is None and concepto is None:
                 continue
@@ -112,16 +116,14 @@ def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
             ticket_codigo = str(ticket_val).strip() if ticket_val else ""
 
             # ---------------------------------------------------------
-            # FILA "TOTAL TICKET"
+            # TOTAL TICKET
             # ---------------------------------------------------------
-            if concepto and str(concepto).strip().upper() == "TOTAL TICKET":
-                forma_pago = ws.cell(row=row_idx, column=col_forma_pago).value if col_forma_pago else ""
-                formas_pago_por_ticket[ticket_codigo] = str(forma_pago).strip() if forma_pago else ""
-
-                total_ticket = _to_float(ws.cell(row=row_idx, column=col_total).value)
-                fecha_venta = _to_date(ws.cell(row=row_idx, column=col_fecha_venta).value)
-                cliente = ws.cell(row=row_idx, column=col_cliente).value
-                empleado = ws.cell(row=row_idx, column=col_empleado).value
+            if concepto and _normalize(str(concepto)) == "total ticket":
+                forma_pago = ws.cell(row=row_idx, column=col["forma de pago"]).value
+                total_ticket = _to_float(ws.cell(row=row_idx, column=col["total"]).value)
+                fecha_venta = _to_date(ws.cell(row=row_idx, column=col["fecha venta"]).value)
+                cliente = ws.cell(row=row_idx, column=col["cliente"]).value
+                empleado = ws.cell(row=row_idx, column=col["empleado"]).value
 
                 movimientos_ticket = db.query(MovimientoCaja).join(Ticket).filter(
                     Ticket.ticket_codigo == ticket_codigo
@@ -140,7 +142,7 @@ def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
                         total_base=total_base,
                         total_iva=total_iva,
                         total_ticket=total_ticket,
-                        forma_pago=formas_pago_por_ticket.get(ticket_codigo, "")
+                        forma_pago=str(forma_pago or "")
                     )
                     db.add(ticket_obj)
                 else:
@@ -150,26 +152,26 @@ def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
                     ticket_obj.total_base = total_base
                     ticket_obj.total_iva = total_iva
                     ticket_obj.total_ticket = total_ticket
-                    ticket_obj.forma_pago = formas_pago_por_ticket.get(ticket_codigo, "")
+                    ticket_obj.forma_pago = str(forma_pago or "")
 
                 db.commit()
                 tickets_cache[ticket_codigo] = ticket_obj
                 continue
 
             # ---------------------------------------------------------
-            # FILA NORMAL → MOVIMIENTO
+            # MOVIMIENTO NORMAL
             # ---------------------------------------------------------
 
-            fecha_venta = _to_date(ws.cell(row=row_idx, column=col_fecha_venta).value)
-            cliente = ws.cell(row=row_idx, column=col_cliente).value
-            empleado = ws.cell(row=row_idx, column=col_empleado).value
-            categoria = ws.cell(row=row_idx, column=col_categoria).value
-            cantidad = _to_float(ws.cell(row=row_idx, column=col_cantidad).value)
-            subtotal = _to_float(ws.cell(row=row_idx, column=col_subtotal).value)
-            impuesto = ws.cell(row=row_idx, column=col_impuesto).value
-            cuota = _to_float(ws.cell(row=row_idx, column=col_cuota).value)
-            descuento = _to_float(ws.cell(row=row_idx, column=col_descuento).value)
-            total_linea = _to_float(ws.cell(row=row_idx, column=col_total).value)
+            fecha_venta = _to_date(ws.cell(row=row_idx, column=col["fecha venta"]).value)
+            cliente = ws.cell(row=row_idx, column=col["cliente"]).value
+            empleado = ws.cell(row=row_idx, column=col["empleado"]).value
+            categoria = ws.cell(row=row_idx, column=col["categoria"]).value
+            cantidad = _to_float(ws.cell(row=row_idx, column=col["cantidad"]).value)
+            subtotal = _to_float(ws.cell(row=row_idx, column=col["subtotal"]).value)
+            impuesto = ws.cell(row=row_idx, column=col["impuesto"]).value
+            cuota = _to_float(ws.cell(row=row_idx, column=col["cuota"]).value)
+            descuento = _to_float(ws.cell(row=row_idx, column=col["descuento"]).value)
+            total_linea = _to_float(ws.cell(row=row_idx, column=col["total"]).value)
 
             ticket_obj = tickets_cache.get(ticket_codigo)
             if not ticket_obj:

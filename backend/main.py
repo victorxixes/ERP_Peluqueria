@@ -12,6 +12,19 @@ from models.activo import Activo
 from models.ingreso import Ingreso
 from models.log import Log
 
+# IMPORTA LOS MODELOS QUE FALTAN
+from models.nomina import Nomina
+from models.irpf_prevision import IRPFPrevision
+from models.iva_prevision import IVAPrevision
+from models.iva_resumen import IVAPeriodoResumen
+from models.servicio import Servicio
+from models.categoria import Categoria
+from models.aprendizaje_items import AprendizajeItem
+from models.modelo_390 import Modelo390
+from models.cierre_fiscal import CierreFiscal
+from models.configuracion_fiscal import ConfiguracionFiscal
+
+
 # Crear tablas (solo temporal)
 Base.metadata.create_all(bind=engine)
 

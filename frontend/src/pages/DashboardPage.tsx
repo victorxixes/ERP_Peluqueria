@@ -23,6 +23,7 @@ export const DashboardPage = () => {
 
   return (
     <div className="page light-mode">
+
       {/* Header */}
       <div className="section flex justify-between items-center">
         <div>
@@ -33,49 +34,49 @@ export const DashboardPage = () => {
 
       {/* Tarjetas principales */}
       <div className="dashboard-grid">
-        <div className="card animate-fade">
-          <div className="card-icon bg-green-600">💶</div>
-          <h3 className="card-title">Ingresos del mes</h3>
-          <p className="card-value text-green">{data.total_ingresos} €</p>
+        <div className="dashboard-card">
+          <div className="dashboard-card-icon">💶</div>
+          <h3 className="dashboard-card-title">Ingresos del mes</h3>
+          <p className="dashboard-card-value">{data.total_ingresos} €</p>
         </div>
 
-        <div className="card animate-fade">
-          <div className="card-icon bg-red-600">📉</div>
-          <h3 className="card-title">Gastos del mes</h3>
-          <p className="card-value text-red">{data.total_gastos} €</p>
+        <div className="dashboard-card">
+          <div className="dashboard-card-icon">📉</div>
+          <h3 className="dashboard-card-title">Gastos del mes</h3>
+          <p className="dashboard-card-value">{data.total_gastos} €</p>
         </div>
 
-        <div className="card animate-fade">
-          <div className="card-icon bg-blue-600">📊</div>
-          <h3 className="card-title">Beneficio</h3>
-          <p className="card-value">{data.beneficio} €</p>
+        <div className="dashboard-card">
+          <div className="dashboard-card-icon">📊</div>
+          <h3 className="dashboard-card-title">Beneficio</h3>
+          <p className="dashboard-card-value">{data.beneficio} €</p>
         </div>
 
-        <div className="card animate-fade">
-          <div className="card-icon bg-yellow-600">📝</div>
-          <h3 className="card-title">Logs hoy</h3>
-          <p className="card-value text-blue">{data.logs_hoy}</p>
+        <div className="dashboard-card">
+          <div className="dashboard-card-icon">📝</div>
+          <h3 className="dashboard-card-title">Logs hoy</h3>
+          <p className="dashboard-card-value">{data.logs_hoy}</p>
         </div>
       </div>
 
       {/* IVA */}
       <div className="dashboard-grid">
-        <div className="card animate-fade">
-          <div className="card-icon bg-yellow-500">💸</div>
-          <h3 className="card-title">IVA repercutido</h3>
-          <p className="card-value text-yellow">{data.iva_repercutido} €</p>
+        <div className="dashboard-card">
+          <div className="dashboard-card-icon">💸</div>
+          <h3 className="dashboard-card-title">IVA repercutido</h3>
+          <p className="dashboard-card-value">{data.iva_repercutido} €</p>
         </div>
 
-        <div className="card animate-fade">
-          <div className="card-icon bg-yellow-500">💰</div>
-          <h3 className="card-title">IVA soportado</h3>
-          <p className="card-value text-yellow">{data.iva_soportado} €</p>
+        <div className="dashboard-card">
+          <div className="dashboard-card-icon">💰</div>
+          <h3 className="dashboard-card-title">IVA soportado</h3>
+          <p className="dashboard-card-value">{data.iva_soportado} €</p>
         </div>
 
-        <div className="card animate-fade">
-          <div className="card-icon bg-yellow-500">⚖️</div>
-          <h3 className="card-title">IVA final</h3>
-          <p className="card-value text-yellow">{data.iva_final} €</p>
+        <div className="dashboard-card">
+          <div className="dashboard-card-icon">⚖️</div>
+          <h3 className="dashboard-card-title">IVA final</h3>
+          <p className="dashboard-card-value">{data.iva_final} €</p>
         </div>
       </div>
 

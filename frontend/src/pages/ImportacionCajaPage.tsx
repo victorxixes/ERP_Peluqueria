@@ -132,15 +132,15 @@ export const ImportacionCajaPage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            <div className="result-box emerald">
-              <h3 className="result-title">Tickets creados</h3>
-              <p className="result-value">{resultado.resultado?.tickets_creados ?? "-"}</p>
-            </div>
+           <div className="result-box emerald">
+  <h3 className="result-title">Tickets creados</h3>
+  <p className="result-value">{resultado?.tickets_creados ?? "-"}</p>
+</div>
 
-            <div className="result-box blue">
-              <h3 className="result-title">Movimientos histórico</h3>
-              <p className="result-value">{resultado.resultado?.movimientos_historico ?? "-"}</p>
-            </div>
+<div className="result-box blue">
+  <h3 className="result-title">Movimientos histórico</h3>
+  <p className="result-value">{resultado?.movimientos_historico ?? "-"}</p>
+</div>
 
           </div>
 

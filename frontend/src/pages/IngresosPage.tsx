@@ -20,7 +20,7 @@ export const IngresosPage = () => {
   };
 
   const crear = async () => {
-    await api.post("/ingresos", form);
+    await api.post("/ingresos/", form);
     setForm({ fecha: "", descripcion: "", cantidad: "", proveedor_id: "", categoria: "" });
     setShowModal(false);
     cargar();

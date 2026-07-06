@@ -18,31 +18,26 @@ export const LoginPage = () => {
 
       const { access_token, refresh_token } = res.data;
 
-      // Guardar tokens
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("refresh_token", refresh_token);
 
-      // Redirigir al dashboard
       window.location.href = "/dashboard";
 
     } catch (err: any) {
-      console.error(err);
-      setError("Credenciales incorrectas o usuario no encontrado.");
+      setError("Credenciales incorrectas.");
     }
   };
 
   return (
     <div className="login-page">
       <form onSubmit={handleLogin} className="login-card">
-
-        <h1 className="login-title">Iniciar sesión</h1>
+        <h1>Iniciar sesión</h1>
 
         {error && <p className="login-error">{error}</p>}
 
         <input
           type="email"
           placeholder="Email"
-          className="login-input"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -50,14 +45,11 @@ export const LoginPage = () => {
         <input
           type="password"
           placeholder="Contraseña"
-          className="login-input"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button type="submit" className="login-button">
-          Entrar
-        </button>
+        <button type="submit">Entrar</button>
       </form>
     </div>
   );

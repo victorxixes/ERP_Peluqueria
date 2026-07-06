@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import { Layout } from "./layout/Layout";
 
 import { DashboardPage } from "./pages/DashboardPage";
@@ -17,6 +16,7 @@ import { IVAPage } from "./pages/IVAPage";
 import { IVAAnualPage } from "./pages/IVAAnualPage";
 import { IRPFPage } from "./pages/IRPFPage";
 import { IAFiscalPage } from "./pages/IAFiscalPage";
+import Modelo390Page from "./pages/Modelo390Page";
 import { ValidacionExcelPage } from "./pages/ValidacionExcelPage";
 import { LogsPage } from "./pages/LogsPage";
 import { BackupPage } from "./pages/BackupPage";
@@ -43,6 +43,7 @@ export const App = () => {
           <Route path="/iva-anual" element={<IVAAnualPage />} />
           <Route path="/irpf" element={<IRPFPage />} />
           <Route path="/ia-fiscal" element={<IAFiscalPage />} />
+          <Route path="/modelo390" element={<Modelo390Page />} />
           <Route path="/validacion-excel" element={<ValidacionExcelPage />} />
           <Route path="/backup" element={<BackupPage />} />
           <Route path="/importacion-caja" element={<ImportacionCajaPage />} />

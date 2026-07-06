@@ -9,17 +9,17 @@
 }
 
 /* 🔥 Sidebar SIEMPRE a la izquierda */
-.layout-container > aside,
-.sidebar {
-  width: 260px !important;
-  flex-shrink: 0 !important;
-  display: block !important;
+
+
+.layout-container {
+  display: flex;
+  min-height: 100vh;
+  background: #f7f8fa;
 }
 
-/* 🔥 Contenido SIEMPRE a la derecha */
 .layout-content {
-  flex: 1 !important;
-  padding: 32px !important;
-  overflow-y: auto !important;
-  display: block !important;
+  flex: 1;
+  padding: 20px 30px; /* antes 32px o más → demasiado grande */
+  margin: 0;
 }
+

@@ -3,7 +3,33 @@ from fastapi import UploadFile
 from openpyxl import load_workbook
 from io import BytesIO
 from sqlalchemy.orm import Session
+from datetime import datetime
 from models.historico import Ticket, MovimientoCaja
+
+
+# ---------------------------------------------------------
+# UTILIDADES
+# ---------------------------------------------------------
+
+def _to_float(v):
+    """Convierte valores Excel a float de forma segura."""
+    if v is None:
+        return 0.0
+    if isinstance(v, str):
+        v = v.replace(",", ".").strip()
+    try:
+        return float(v)
+    except:
+        return 0.0
+
+
+def _to_date(v):
+    """Convierte fechas Excel a datetime."""
+    if isinstance(v, datetime):
+        return v
+    if isinstance(v, float):  # número de serie Excel
+        return datetime.fromordinal(datetime(1900, 1, 1).toordinal() + int(v) - 2)
+    return None
 
 
 # ---------------------------------------------------------
@@ -12,6 +38,7 @@ from models.historico import Ticket, MovimientoCaja
 
 def _leer_hoja_principal(excel_file: UploadFile):
     contenido = excel_file.file.read()
+    excel_file.file.seek(0)  # ← CRÍTICO: permite relecturas
     wb = load_workbook(BytesIO(contenido), data_only=True)
     ws = wb[wb.sheetnames[0]]
     return ws
@@ -20,7 +47,8 @@ def _leer_hoja_principal(excel_file: UploadFile):
 def _mapear_cabeceras(ws) -> Dict[str, int]:
     cabeceras = {}
     for idx, cell in enumerate(ws[1], start=1):
-        nombre = str(cell.value).strip() if cell.value is not None else ""
+        nombre = str(cell.value).strip().lower() if cell.value else ""
+        nombre = nombre.replace("í", "i")  # ← normalización
         if nombre:
             cabeceras[nombre] = idx
     return cabeceras
@@ -34,27 +62,27 @@ def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
     ws = _leer_hoja_principal(caja_excel)
     cabeceras = _mapear_cabeceras(ws)
 
-    # Columnas necesarias
-    col_ticket = cabeceras.get("Ticket")
-    col_fecha_venta = cabeceras.get("Fecha venta")
-    col_cliente = cabeceras.get("Cliente")
-    col_empleado = cabeceras.get("Empleado")
-    col_concepto = cabeceras.get("Concepto")
-    col_categoria = cabeceras.get("Categoría")
-    col_cantidad = cabeceras.get("Cantidad")
-    col_subtotal = cabeceras.get("Subtotal")
-    col_impuesto = cabeceras.get("Impuesto")
-    col_cuota = cabeceras.get("Cuota")
-    col_descuento = cabeceras.get("Descuento")
-    col_total = cabeceras.get("Total")
-    col_forma_pago = cabeceras.get("Forma de pago")
+    # Columnas necesarias (normalizadas)
+    col_ticket       = cabeceras.get("ticket")
+    col_fecha_venta  = cabeceras.get("fecha venta")
+    col_cliente      = cabeceras.get("cliente")
+    col_empleado     = cabeceras.get("empleado")
+    col_concepto     = cabeceras.get("concepto")
+    col_categoria    = cabeceras.get("categoria")
+    col_cantidad     = cabeceras.get("cantidad")
+    col_subtotal     = cabeceras.get("subtotal")
+    col_impuesto     = cabeceras.get("impuesto")
+    col_cuota        = cabeceras.get("cuota")
+    col_descuento    = cabeceras.get("descuento")
+    col_total        = cabeceras.get("total")
+    col_forma_pago   = cabeceras.get("forma de pago")
 
-    # Validación mínima
     campos_obligatorios = [
         col_ticket, col_fecha_venta, col_cliente, col_empleado,
         col_concepto, col_categoria, col_cantidad,
         col_subtotal, col_impuesto, col_cuota, col_total
     ]
+
     if any(c is None for c in campos_obligatorios):
         raise ValueError("El Excel no tiene todas las columnas necesarias para el importador detallado.")
 
@@ -73,7 +101,7 @@ def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
         if ticket_val is None and concepto is None:
             continue
 
-        ticket_codigo = str(ticket_val).strip() if ticket_val is not None else ""
+        ticket_codigo = str(ticket_val).strip() if ticket_val else ""
 
         # ---------------------------------------------------------
         # FILA "TOTAL TICKET"
@@ -82,8 +110,8 @@ def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
             forma_pago = ws.cell(row=row_idx, column=col_forma_pago).value
             formas_pago_por_ticket[ticket_codigo] = str(forma_pago).strip() if forma_pago else ""
 
-            total_ticket = ws.cell(row=row_idx, column=col_total).value
-            fecha_venta = ws.cell(row=row_idx, column=col_fecha_venta).value
+            total_ticket = _to_float(ws.cell(row=row_idx, column=col_total).value)
+            fecha_venta = _to_date(ws.cell(row=row_idx, column=col_fecha_venta).value)
             cliente = ws.cell(row=row_idx, column=col_cliente).value
             empleado = ws.cell(row=row_idx, column=col_empleado).value
 
@@ -105,36 +133,37 @@ def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
                     empleado=empleado,
                     total_base=total_base,
                     total_iva=total_iva,
-                    total_ticket=float(total_ticket or 0),
+                    total_ticket=total_ticket,
                     forma_pago=formas_pago_por_ticket.get(ticket_codigo, "")
                 )
                 db.add(ticket_obj)
-                tickets_cache[ticket_codigo] = ticket_obj
             else:
                 ticket_obj.fecha_venta = fecha_venta
                 ticket_obj.cliente = cliente
                 ticket_obj.empleado = empleado
                 ticket_obj.total_base = total_base
                 ticket_obj.total_iva = total_iva
-                ticket_obj.total_ticket = float(total_ticket or 0)
+                ticket_obj.total_ticket = total_ticket
                 ticket_obj.forma_pago = formas_pago_por_ticket.get(ticket_codigo, "")
 
+            db.commit()  # ← CRÍTICO
+            tickets_cache[ticket_codigo] = ticket_obj
             continue
 
         # ---------------------------------------------------------
         # FILA NORMAL → MOVIMIENTO
         # ---------------------------------------------------------
 
-        fecha_venta = ws.cell(row=row_idx, column=col_fecha_venta).value
+        fecha_venta = _to_date(ws.cell(row=row_idx, column=col_fecha_venta).value)
         cliente = ws.cell(row=row_idx, column=col_cliente).value
         empleado = ws.cell(row=row_idx, column=col_empleado).value
         categoria = ws.cell(row=row_idx, column=col_categoria).value
-        cantidad = ws.cell(row=row_idx, column=col_cantidad).value
-        subtotal = ws.cell(row=row_idx, column=col_subtotal).value
+        cantidad = _to_float(ws.cell(row=row_idx, column=col_cantidad).value)
+        subtotal = _to_float(ws.cell(row=row_idx, column=col_subtotal).value)
         impuesto = ws.cell(row=row_idx, column=col_impuesto).value
-        cuota = ws.cell(row=row_idx, column=col_cuota).value
-        descuento = ws.cell(row=row_idx, column=col_descuento).value
-        total_linea = ws.cell(row=row_idx, column=col_total).value
+        cuota = _to_float(ws.cell(row=row_idx, column=col_cuota).value)
+        descuento = _to_float(ws.cell(row=row_idx, column=col_descuento).value)
+        total_linea = _to_float(ws.cell(row=row_idx, column=col_total).value)
 
         # Buscar/crear ticket base
         ticket_obj = tickets_cache.get(ticket_codigo)
@@ -152,6 +181,7 @@ def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
                     forma_pago=""
                 )
                 db.add(ticket_obj)
+                db.commit()
             tickets_cache[ticket_codigo] = ticket_obj
 
         movimiento = MovimientoCaja(
@@ -161,12 +191,12 @@ def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
             empleado=empleado,
             concepto=concepto,
             categoria=categoria,
-            cantidad=float(cantidad or 0),
-            subtotal=float(subtotal or 0),
+            cantidad=cantidad,
+            subtotal=subtotal,
             iva_porcentaje=str(impuesto or ""),
-            iva_cuota=float(cuota or 0),
-            descuento=float(descuento or 0),
-            total_linea=float(total_linea or 0),
+            iva_cuota=cuota,
+            descuento=descuento,
+            total_linea=total_linea,
         )
 
         db.add(movimiento)
@@ -174,10 +204,8 @@ def importar_caja_excel(caja_excel: UploadFile, db: Session) -> Dict[str, Any]:
 
     db.commit()
 
-    tickets_creados = db.query(Ticket).count()
-
     return {
-        "tickets_creados": tickets_creados,
+        "tickets_creados": len(tickets_cache),
         "movimientos_historico": movimientos_count,
         "desconocidos": []
     }

@@ -2,9 +2,6 @@ from sqlalchemy.orm import Session
 from models.usuario import Usuario
 from services.logs_service import registrar_log
 
-registrar_log(db, usuario="admin", accion="Crear ingreso", detalle=f"ID: {ingreso.id}")
-
-
 def crear_usuario(db: Session, data: dict):
     usuario = Usuario(**data)
     db.add(usuario)

@@ -43,6 +43,7 @@ from routers.prevision_iva import router as prevision_iva_router
 from routers.cierre_fiscal import router as cierre_fiscal_router
 
 # Routers adicionales
+from routers import iva
 from routers import proveedores
 from routers import usuarios
 from routers import servicios
@@ -75,6 +76,7 @@ app.add_middleware(
 app.include_router(importar_caja_router)
 app.include_router(catalogo_router)
 app.include_router(irpf_router)
+app.include_router(iva)
 app.include_router(dashboard_router)
 app.include_router(logs_router)
 app.include_router(historico_router)

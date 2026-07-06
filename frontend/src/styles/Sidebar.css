@@ -1,12 +1,12 @@
 /* ============================
-   SIDEBAR – SaaS Premium 2026
+   SIDEBAR – SaaS Premium 2026 (BLANCO)
    ============================ */
 
 .sidebar {
   width: 240px;
-  background: #0f172a; /* slate-900 */
+  background: #ffffff; /* FONDO BLANCO */
   padding: 24px 18px;
-  border-right: 1px solid rgba(255,255,255,0.05);
+  border-right: 1px solid rgba(0,0,0,0.08); /* línea suave */
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -15,7 +15,7 @@
 .sidebar-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #f1f5f9;
+  color: #1e293b; /* texto oscuro */
   margin-bottom: 20px;
   padding-left: 6px;
 }
@@ -27,19 +27,19 @@
   padding: 12px 14px;
   border-radius: 10px;
   font-size: 0.95rem;
-  color: #cbd5e1;
+  color: #475569; /* slate-600 */
   transition: 0.25s ease;
   text-decoration: none;
 }
 
 .sidebar-link:hover {
-  background: rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.06); /* hover suave */
   transform: translateX(4px);
 }
 
 .sidebar-active {
-  background: rgba(255,255,255,0.15);
-  color: #ffffff;
+  background: rgba(59,130,246,0.12); /* azul suave */
+  color: #1e293b;
   font-weight: 600;
   border-left: 4px solid #3b82f6;
 }
@@ -47,4 +47,5 @@
 .icon {
   font-size: 1.25rem;
   opacity: 0.9;
+  color: #3b82f6; /* azul premium */
 }

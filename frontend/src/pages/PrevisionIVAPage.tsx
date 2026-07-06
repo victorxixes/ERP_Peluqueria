@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getIVAPrevision } from "../api/ivaApi";
 
 export const PrevisionIVAPage = () => {

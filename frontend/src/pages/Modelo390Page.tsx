@@ -7,19 +7,19 @@ export default function Modelo390Page() {
   const [loading, setLoading] = useState(false);
   const [dark, setDark] = useState(true);
 
-const cargar = async () => {
-  if (loading) return;
-  setLoading(true);
+  const cargar = async () => {
+    if (loading) return;
+    setLoading(true);
 
-  try {
-    const res = await api.get(`/modelo-390?year=${year}`);
-    setData(res.data);
-  } catch (err) {
-    console.error(err);
-  }
+    try {
+      const res = await api.get(`/modelo-390?year=${year}`);
+      setData(res.data);
+    } catch (err) {
+      console.error(err);
+    }
 
-  setLoading(false);
-};
+    setLoading(false);
+  };
 
   return (
     <div className={dark ? "page dark-mode" : "page light-mode"}>
@@ -74,17 +74,17 @@ const cargar = async () => {
 
             <div className="iva-box green">
               <h3 className="iva-title">Base imponible</h3>
-              <p className="iva-value">{data.base} €</p>
+              <p className="iva-value">{data.base_imponible} €</p>
             </div>
 
             <div className="iva-box blue">
               <h3 className="iva-title">IVA devengado</h3>
-              <p className="iva-value">{data.iva} €</p>
+              <p className="iva-value">{data.iva_devengado} €</p>
             </div>
 
             <div className="iva-box purple">
               <h3 className="iva-title">Total facturado</h3>
-              <p className="iva-value">{data.total} €</p>
+              <p className="iva-value">{data.total_facturado} €</p>
             </div>
 
           </div>

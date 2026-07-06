@@ -33,3 +33,13 @@ h1, h2, h3 {
   font-weight: 600;
   letter-spacing: -0.5px;
 }
+input[type="file"] {
+  all: unset;
+  display: block !important;
+  width: auto !important;
+  padding: 6px !important;
+  border: none !important;
+  background: transparent !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+}

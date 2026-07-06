@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from db import get_db
 from services.importar_caja_service import importar_caja_excel
 
-router = APIRouter(prefix="/importar_caja", tags=["Importar Caja"])
+router = APIRouter(prefix="/importar-caja", tags=["Importar Caja"])
 
 @router.post("/")
 def importar_caja(

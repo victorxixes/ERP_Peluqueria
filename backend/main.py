@@ -16,6 +16,7 @@ from models.log import Log
 Base.metadata.create_all(bind=engine)
 
 # Routers
+# Routers que ya estaban importados
 from routers.importar_caja import router as importar_caja_router
 from routers.catalogo import router as catalogo_router
 from routers.irpf import router as irpf_router
@@ -30,6 +31,19 @@ from routers.modelo_390 import router as modelo_390_router
 from routers.informes import router as informes_router
 from routers.prevision_iva import router as prevision_iva_router
 from routers.cierre_fiscal import router as cierre_fiscal_router
+
+# Routers que estaban desactivados y AHORA sí deben importarse
+from routers import iva
+from routers import proveedores
+from routers import usuarios
+from routers import servicios
+from routers import productos
+from routers import gastos
+from routers import ingresos
+from routers import nominas
+from routers import activos
+from routers import auth
+
 
 app = FastAPI()
 

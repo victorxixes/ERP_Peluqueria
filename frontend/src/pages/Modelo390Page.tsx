@@ -12,7 +12,7 @@ export default function Modelo390Page() {
     setLoading(true);
 
     try {
-      const res = await api.get(`/iva/390/${year}`);
+     const res = await api.get(`/modelo-390?year=${year}`);
       setData(res.data);
     } catch (err) {
       console.error(err);

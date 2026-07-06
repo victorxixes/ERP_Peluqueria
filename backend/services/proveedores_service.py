@@ -2,8 +2,6 @@ from sqlalchemy.orm import Session
 from models.proveedor import Proveedor
 from services.logs_service import registrar_log
 
-registrar_log(db, usuario="admin", accion="Crear ingreso", detalle=f"ID: {ingreso.id}")
-
 
 def crear_proveedor(db: Session, data: dict):
     proveedor = Proveedor(**data)

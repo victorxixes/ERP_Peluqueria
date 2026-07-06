@@ -15,23 +15,40 @@ export const IRPFPage = () => {
     irpf_estimado: "",
   });
 
+  // Cargar previsión anual REAL
   const cargar = async () => {
-    const r = await api.get("/irpf/prevision");
-    setPrevisiones(r.data);
+    try {
+      const year = new Date().getFullYear();
+      const r = await api.get(`/irpf/anual?year=${year}`);
+
+      // El backend devuelve SOLO UNA previsión → la metemos en un array
+      setPrevisiones([r.data]);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
+  // Crear previsión anual REAL
   const crear = async () => {
-    await api.post("/irpf/prevision", form);
-    setForm({
-      año: "",
-      ingresos_totales: "",
-      gastos_totales: "",
-      amortizaciones: "",
-      beneficio_neto: "",
-      irpf_estimado: "",
-    });
-    setShowModal(false);
-    cargar();
+    try {
+      const r = await api.get(`/irpf/anual?year=${form.año}`);
+
+      // El backend calcula y devuelve una previsión → la metemos en un array
+      setPrevisiones([r.data]);
+
+      setForm({
+        año: "",
+        ingresos_totales: "",
+        gastos_totales: "",
+        amortizaciones: "",
+        beneficio_neto: "",
+        irpf_estimado: "",
+      });
+
+      setShowModal(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -79,11 +96,11 @@ export const IRPFPage = () => {
           </thead>
           <tbody>
             {previsiones.map((p) => (
-              <tr key={p.id}>
-                <td>{p.año}</td>
+              <tr key={p.prevision_id}>
+                <td>{p.year}</td>
                 <td>{p.ingresos_totales} €</td>
                 <td>{p.gastos_totales} €</td>
-                <td>{p.amortizaciones} €</td>
+                <td>{p.amortizaciones_totales} €</td>
                 <td>{p.beneficio_neto} €</td>
                 <td>{p.irpf_estimado} €</td>
               </tr>
@@ -99,16 +116,13 @@ export const IRPFPage = () => {
             <h2 className="modal-title">Nueva previsión</h2>
 
             <div className="modal-body">
-              {Object.keys(form).map((key) => (
-                <input
-                  key={key}
-                  type={key === "año" ? "number" : "text"}
-                  placeholder={key.replace("_", " ")}
-                  className="input"
-                  value={(form as any)[key]}
-                  onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                />
-              ))}
+              <input
+                type="number"
+                placeholder="Año"
+                className="input"
+                value={form.año}
+                onChange={(e) => setForm({ ...form, año: e.target.value })}
+              />
             </div>
 
             <div className="modal-footer">

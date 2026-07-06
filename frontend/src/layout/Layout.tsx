@@ -6,6 +6,7 @@ export const Layout = () => {
   return (
     <div className="layout-container">
       <Sidebar />
+
       <div className="layout-content">
         <main>
           <Outlet />
@@ -14,4 +15,3 @@ export const Layout = () => {
     </div>
   );
 };
-

@@ -1,7 +1,6 @@
 /* ============================
    GLOBAL – Estilo Premium 2026
    ============================ */
-
 body {
   margin: 0;
   padding: 0;
@@ -10,7 +9,6 @@ body {
   color: #1a1a1a;
   -webkit-font-smoothing: antialiased;
 }
-
 /* SOLO afecta a enlaces dentro de contenido, NO al Sidebar */
 .page a {
   color: #2563eb;
@@ -21,14 +19,11 @@ body {
 .page a:hover {
   color: #1e40af;
 }
-
-
 .container {
   max-width: 1200px;
   margin: auto;
   padding: 40px 20px;
 }
-
 h1, h2, h3 {
   font-weight: 600;
   letter-spacing: -0.5px;
@@ -44,4 +39,9 @@ input[type="file"] {
   font-size: 14px !important;
   cursor: pointer !important;
   position: relative !important;
+}
+.form-card,
+.section,
+.page {
+  overflow: visible !important;
 }

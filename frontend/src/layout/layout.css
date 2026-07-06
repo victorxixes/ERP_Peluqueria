@@ -4,8 +4,8 @@
   flex-direction: row !important;
   min-height: 100vh !important;
   width: 100% !important;
-  background-color: #0f172a;
-  color: #e2e8f0;
+  background-color: #ffffff !important; /* FONDO BLANCO */
+  color: #000000 !important; /* TEXTO NEGRO */
 }
 
 /* 🔥 Sidebar SIEMPRE a la izquierda */

@@ -21,9 +21,8 @@ export const LoginPage = () => {
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("refresh_token", refresh_token);
 
-      window.location.href = "/dashboard";
-
-    } catch (err: any) {
+      window.location.href = "/";
+    } catch {
       setError("Credenciales incorrectas.");
     }
   };

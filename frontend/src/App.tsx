@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./layout/Layout";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 import { LoginPage } from "./pages/LoginPage";
 

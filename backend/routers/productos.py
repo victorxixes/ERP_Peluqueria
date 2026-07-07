@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from core.auth_dep import get_current_user
-from models.usuario import Usuario
 from models.producto import Producto
 from db import get_db
 
@@ -24,7 +22,6 @@ def get_productos(
     categoria: str | None = None,
     proveedor_id: int | None = None,
     nombre: str | None = None,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return listar_productos(
@@ -39,7 +36,6 @@ def get_productos(
 @router.get("/{producto_id}")
 def get_producto(
     producto_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     producto = obtener_producto(db, producto_id)
@@ -50,7 +46,6 @@ def get_producto(
 @router.post("/")
 def post_producto(
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return crear_producto(db, data)
@@ -59,7 +54,6 @@ def post_producto(
 def put_producto(
     producto_id: int,
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     producto = actualizar_producto(db, producto_id, data)
@@ -70,7 +64,6 @@ def put_producto(
 @router.delete("/{producto_id}")
 def delete_producto(
     producto_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     ok = borrar_producto(db, producto_id)

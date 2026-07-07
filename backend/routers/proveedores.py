@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from core.auth_dep import get_current_user
-from models.usuario import Usuario
 from models.proveedor import Proveedor
 from db import get_db
 
@@ -23,7 +21,6 @@ def get_proveedores(
     limit: int = 50,
     categoria: str | None = None,
     nombre: str | None = None,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     query = db.query(Proveedor)
@@ -44,7 +41,6 @@ def get_proveedores(
 @router.post("/")
 def post_proveedor(
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return crear_proveedor(db, data)
@@ -52,7 +48,6 @@ def post_proveedor(
 @router.get("/{proveedor_id}")
 def get_proveedor(
     proveedor_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return obtener_proveedor(db, proveedor_id)
@@ -61,7 +56,6 @@ def get_proveedor(
 def put_proveedor(
     proveedor_id: int,
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return actualizar_proveedor(db, proveedor_id, data)
@@ -69,7 +63,6 @@ def put_proveedor(
 @router.delete("/{proveedor_id}")
 def delete_proveedor(
     proveedor_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return eliminar_proveedor(db, proveedor_id)

@@ -61,6 +61,8 @@ app.add_middleware(
     allow_origins=[
         "https://erp-peluqueria-front.onrender.com",
         "https://erp-peluqueria-1.onrender.com",
+        "https://erp-peluqueria.onrender.com",
+        "https://erp-peluqueria.onrender.com/",
         "https://erp-peluqueria-1.onrender.com/",
         "http://localhost:5173",
     ],
@@ -68,6 +70,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # ============================
 # MONTAR ROUTERS

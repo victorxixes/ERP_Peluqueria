@@ -1,9 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from core.auth_dep import get_current_user
-from models.usuario import Usuario
-from models.activo import Activo
 from db import get_db
 
 from services.activos_service import (
@@ -25,7 +22,6 @@ def get_activos(
     proveedor_id: int | None = None,
     desde: str | None = None,
     hasta: str | None = None,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return listar_activos(
@@ -41,7 +37,6 @@ def get_activos(
 @router.post("/")
 def post_activo(
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return crear_activo(db, data)
@@ -49,7 +44,6 @@ def post_activo(
 @router.get("/{activo_id}")
 def get_activo(
     activo_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return obtener_activo(db, activo_id)
@@ -58,7 +52,6 @@ def get_activo(
 def put_activo(
     activo_id: int,
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return actualizar_activo(db, activo_id, data)
@@ -66,7 +59,6 @@ def put_activo(
 @router.delete("/{activo_id}")
 def delete_activo(
     activo_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return eliminar_activo(db, activo_id)

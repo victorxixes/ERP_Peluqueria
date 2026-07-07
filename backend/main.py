@@ -64,7 +64,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://erp-peluqueria-front.onrender.com",
+        "https://erp-peluqueria-1.onrender.com",
         "https://erp-peluqueria-front.onrender.com/",
         "http://localhost:5173",
     ],

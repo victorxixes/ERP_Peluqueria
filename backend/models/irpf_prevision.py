@@ -7,7 +7,9 @@ class IRPFPrevision(Base):
     id = Column(Integer, primary_key=True)
     año = Column(Integer, nullable=False)
 
-    ingresos_brutos = Column(Float, nullable=False)
-    gastos_deducibles = Column(Float, nullable=False)
-    base_irpf = Column(Float, nullable=False)
+    ingresos_totales = Column(Float, nullable=False)
+    gastos_totales = Column(Float, nullable=False)
+    nominas_totales = Column(Float, nullable=False)
+    amortizaciones_totales = Column(Float, nullable=False)
+    beneficio_neto = Column(Float, nullable=False)
     irpf_estimado = Column(Float, nullable=False)

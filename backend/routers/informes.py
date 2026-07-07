@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime
 
 from db import get_db
-from core.auth_dep import require_admin
 
 from services.informes_service import (
     informe_ventas,
@@ -26,7 +25,7 @@ router = APIRouter(prefix="/informes", tags=["Informes"])
 # ---------------------------------------------------------
 
 @router.get("/ventas")
-def ventas(desde: str, hasta: str, db: Session = Depends(get_db), user=Depends(require_admin)):
+def ventas(desde: str, hasta: str, db: Session = Depends(get_db)):
     datos = informe_ventas(
         db,
         datetime.fromisoformat(desde),
@@ -37,7 +36,7 @@ def ventas(desde: str, hasta: str, db: Session = Depends(get_db), user=Depends(r
         db,
         tipo="INFORME",
         accion="informe ventas",
-        usuario=user.email,
+        usuario="sistema",
         datos={"desde": desde, "hasta": hasta, "movimientos": len(datos)}
     )
 
@@ -45,7 +44,7 @@ def ventas(desde: str, hasta: str, db: Session = Depends(get_db), user=Depends(r
 
 
 @router.get("/ventas/excel")
-def ventas_excel(desde: str, hasta: str, db: Session = Depends(get_db), user=Depends(require_admin)):
+def ventas_excel(desde: str, hasta: str, db: Session = Depends(get_db)):
     datos = informe_ventas(
         db,
         datetime.fromisoformat(desde),
@@ -56,7 +55,7 @@ def ventas_excel(desde: str, hasta: str, db: Session = Depends(get_db), user=Dep
         db,
         tipo="INFORME",
         accion="descargar informe ventas excel",
-        usuario=user.email,
+        usuario="sistema",
         datos={"desde": desde, "hasta": hasta, "movimientos": len(datos)}
     )
 
@@ -68,7 +67,7 @@ def ventas_excel(desde: str, hasta: str, db: Session = Depends(get_db), user=Dep
 # ---------------------------------------------------------
 
 @router.post("/generar-cierre-mensual")
-def generar_cierre_mensual(payload: dict, db: Session = Depends(get_db), user=Depends(require_admin)):
+def generar_cierre_mensual(payload: dict, db: Session = Depends(get_db)):
     year = payload["year"]
     month = payload["month"]
 
@@ -76,7 +75,7 @@ def generar_cierre_mensual(payload: dict, db: Session = Depends(get_db), user=De
         db,
         tipo="CIERRE FISCAL",
         accion="generar cierre mensual",
-        usuario=user.email,
+        usuario="sistema",
         datos={"year": year, "month": month}
     )
 
@@ -84,7 +83,7 @@ def generar_cierre_mensual(payload: dict, db: Session = Depends(get_db), user=De
 
 
 @router.post("/generar-cierre-trimestral")
-def generar_cierre_trimestral(payload: dict, db: Session = Depends(get_db), user=Depends(require_admin)):
+def generar_cierre_trimestral(payload: dict, db: Session = Depends(get_db)):
     year = payload["year"]
     quarter = payload["quarter"]
 
@@ -92,7 +91,7 @@ def generar_cierre_trimestral(payload: dict, db: Session = Depends(get_db), user
         db,
         tipo="CIERRE FISCAL",
         accion="generar cierre trimestral",
-        usuario=user.email,
+        usuario="sistema",
         datos={"year": year, "quarter": quarter}
     )
 
@@ -100,14 +99,14 @@ def generar_cierre_trimestral(payload: dict, db: Session = Depends(get_db), user
 
 
 @router.post("/generar-cierre-anual")
-def generar_cierre_anual(payload: dict, db: Session = Depends(get_db), user=Depends(require_admin)):
+def generar_cierre_anual(payload: dict, db: Session = Depends(get_db)):
     year = payload["year"]
 
     registrar_log(
         db,
         tipo="CIERRE FISCAL",
         accion="generar cierre anual",
-        usuario=user.email,
+        usuario="sistema",
         datos={"year": year}
     )
 
@@ -115,14 +114,14 @@ def generar_cierre_anual(payload: dict, db: Session = Depends(get_db), user=Depe
 
 
 @router.post("/generar-modelo-390")
-def generar_modelo_390(payload: dict, db: Session = Depends(get_db), user=Depends(require_admin)):
+def generar_modelo_390(payload: dict, db: Session = Depends(get_db)):
     year = payload["year"]
 
     registrar_log(
         db,
         tipo="MODELO 390",
         accion="generar modelo 390",
-        usuario=user.email,
+        usuario="sistema",
         datos={"year": year}
     )
 
@@ -130,7 +129,7 @@ def generar_modelo_390(payload: dict, db: Session = Depends(get_db), user=Depend
 
 
 @router.post("/generar-prevision-iva")
-def generar_prevision_iva(payload: dict, db: Session = Depends(get_db), user=Depends(require_admin)):
+def generar_prevision_iva(payload: dict, db: Session = Depends(get_db)):
     year = payload["year"]
     month = payload["month"]
 
@@ -138,7 +137,7 @@ def generar_prevision_iva(payload: dict, db: Session = Depends(get_db), user=Dep
         db,
         tipo="IVA",
         accion="generar previsión IVA",
-        usuario=user.email,
+        usuario="sistema",
         datos={"year": year, "month": month}
     )
 

@@ -56,15 +56,13 @@ from routers.activos import router as activos_router
 # ============================
 # APP
 # ============================
-
-app = FastAPI()
-
-# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "https://erp-peluqueria-front.onrender.com",
         "https://erp-peluqueria-1.onrender.com",
-         "http://localhost:5173",
+        "https://erp-peluqueria-1.onrender.com/",
+        "http://localhost:5173",
     ],
     allow_credentials=True,
     allow_methods=["*"],

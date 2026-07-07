@@ -1,9 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from core.auth_dep import get_current_user
 from db import get_db
-from models.usuario import Usuario
 from models.ingreso import Ingreso
 
 from services.ingresos_service import (
@@ -24,7 +22,6 @@ def get_ingresos(
     categoria: str | None = None,
     desde: str | None = None,
     hasta: str | None = None,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     query = db.query(Ingreso)
@@ -45,7 +42,6 @@ def get_ingresos(
 @router.post("/")
 def post_ingreso(
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return crear_ingreso(db, data)
@@ -53,7 +49,6 @@ def post_ingreso(
 @router.get("/{ingreso_id}")
 def get_ingreso(
     ingreso_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return obtener_ingreso(db, ingreso_id)
@@ -62,7 +57,6 @@ def get_ingreso(
 def put_ingreso(
     ingreso_id: int,
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return actualizar_ingreso(db, ingreso_id, data)
@@ -70,7 +64,6 @@ def put_ingreso(
 @router.delete("/{ingreso_id}")
 def delete_ingreso(
     ingreso_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return eliminar_ingreso(db, ingreso_id)

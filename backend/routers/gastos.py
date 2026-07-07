@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from core.auth_dep import get_current_user
-from models.usuario import Usuario
 from models.gasto import Gasto
 from db import get_db
 
@@ -25,7 +23,6 @@ def get_gastos(
     proveedor_id: int | None = None,
     desde: str | None = None,
     hasta: str | None = None,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     query = db.query(Gasto)
@@ -49,7 +46,6 @@ def get_gastos(
 @router.post("/")
 def post_gasto(
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return crear_gasto(db, data)
@@ -57,7 +53,6 @@ def post_gasto(
 @router.get("/{gasto_id}")
 def get_gasto(
     gasto_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return obtener_gasto(db, gasto_id)
@@ -66,7 +61,6 @@ def get_gasto(
 def put_gasto(
     gasto_id: int,
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return actualizar_gasto(db, gasto_id, data)
@@ -74,7 +68,6 @@ def put_gasto(
 @router.delete("/{gasto_id}")
 def delete_gasto(
     gasto_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return eliminar_gasto(db, gasto_id)

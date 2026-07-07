@@ -1,8 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./layout/Layout";
-import { ProtectedRoute } from "./components/ProtectedRoute";
 
-import { LoginPage } from "./pages/LoginPage";
 
 import { DashboardPage } from "./pages/DashboardPage";
 import { IngresosPage } from "./pages/IngresosPage";
@@ -29,9 +27,6 @@ export const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-
-        {/* Login sin layout */}
-        <Route path="/login" element={<LoginPage />} />
 
         {/* Rutas protegidas con layout */}
         <Route element={<Layout />}>

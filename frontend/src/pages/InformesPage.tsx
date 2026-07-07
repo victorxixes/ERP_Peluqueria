@@ -146,7 +146,7 @@ export const InformesPage = () => {
                 <td>{i.fecha}</td>
                 <td>
                   <a
-                    href={`http://localhost:8000/informes/${i.id}`}
+                    href={`${api.defaults.baseURL}/informes/${i.id}`}
                     className="btn small primary"
                   >
                     Descargar

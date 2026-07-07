@@ -65,8 +65,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://erp-peluqueria-1.onrender.com",
-        "https://erp-peluqueria-front.onrender.com/",
-        "http://localhost:5173",
+         "http://localhost:5173",
     ],
     allow_credentials=True,
     allow_methods=["*"],

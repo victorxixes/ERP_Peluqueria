@@ -4,6 +4,9 @@ const api = axios.create({
   baseURL: "https://erp-peluqueria.onrender.com",
 });
 
+export default api;
+
+
 // Añadir token a cada petición
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("access_token");

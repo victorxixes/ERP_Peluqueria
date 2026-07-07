@@ -40,14 +40,6 @@ export const GastosPage = () => {
           <p className="text-muted">Gestión de gastos del ERP</p>
         </div>
 
-        <button
-          className="btn secondary"
-          onClick={() => setDark(!dark)}
-        >
-          {dark ? "Modo claro" : "Modo oscuro"}
-        </button>
-      </div>
-
       {/* Botón */}
       <button
         onClick={() => setShowModal(true)}

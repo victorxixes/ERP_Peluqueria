@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from core.auth_dep import get_current_user
-from models.usuario import Usuario
 from models.servicio import Servicio
 from db import get_db
 
@@ -23,7 +21,6 @@ def get_servicios(
     limit: int = 50,
     categoria: str | None = None,
     activo: bool | None = None,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     query = db.query(Servicio)
@@ -44,7 +41,6 @@ def get_servicios(
 @router.get("/{servicio_id}")
 def get_servicio(
     servicio_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     servicio = obtener_servicio(db, servicio_id)
@@ -55,7 +51,6 @@ def get_servicio(
 @router.post("/")
 def post_servicio(
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return crear_servicio(db, data)
@@ -64,7 +59,6 @@ def post_servicio(
 def put_servicio(
     servicio_id: int,
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     servicio = actualizar_servicio(db, servicio_id, data)
@@ -75,7 +69,6 @@ def put_servicio(
 @router.delete("/{servicio_id}")
 def delete_servicio(
     servicio_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     ok = borrar_servicio(db, servicio_id)

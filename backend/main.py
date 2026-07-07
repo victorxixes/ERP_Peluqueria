@@ -52,7 +52,6 @@ from routers.gastos import router as gastos_router
 from routers.ingresos import router as ingresos_router
 from routers.nominas import router as nominas_router
 from routers.activos import router as activos_router
-from routers.auth import router as auth_router
 
 # ============================
 # APP
@@ -100,4 +99,4 @@ app.include_router(gastos_router)
 app.include_router(ingresos_router)
 app.include_router(nominas_router)
 app.include_router(activos_router)
-app.include_router(auth_router)
+

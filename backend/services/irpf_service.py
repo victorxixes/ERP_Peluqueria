@@ -4,22 +4,23 @@ from models.gasto import Gasto
 from models.activo import Activo
 from models.nomina import Nomina
 from models.irpf_prevision import IRPFPrevision
-from datetime import datetime
 
 def calcular_irpf_anual(db: Session, year: int):
+    # Obtener datos
     ingresos = db.query(Ingreso).filter(Ingreso.fecha.between(f"{year}-01-01", f"{year}-12-31")).all()
     gastos = db.query(Gasto).filter(Gasto.fecha.between(f"{year}-01-01", f"{year}-12-31")).all()
     nominas = db.query(Nomina).filter(Nomina.fecha.between(f"{year}-01-01", f"{year}-12-31")).all()
     activos = db.query(Activo).all()
 
-    ingresos_totales = sum(i.total for i in ingresos)
-    gastos_totales = sum(g.total for g in gastos)
-    nominas_totales = sum(n.salario_neto for n in nominas)
-    amortizaciones_totales = sum(a.amortizacion_anual for a in activos)
+    # Sumas seguras
+    ingresos_totales = sum((i.total or 0) for i in ingresos)
+    gastos_totales = sum((g.total or 0) for g in gastos)
+    nominas_totales = sum((n.salario_neto or 0) for n in nominas)
+    amortizaciones_totales = sum((a.amortizacion_anual or 0) for a in activos)
 
     beneficio_neto = ingresos_totales - gastos_totales - nominas_totales - amortizaciones_totales
 
-    # Tramos IRPF oficiales simplificados
+    # Tramos IRPF
     if beneficio_neto < 12450:
         irpf_estimado = beneficio_neto * 0.19
     elif beneficio_neto < 20200:
@@ -31,16 +32,30 @@ def calcular_irpf_anual(db: Session, year: int):
     else:
         irpf_estimado = beneficio_neto * 0.45
 
-    prevision = IRPFPrevision(
-        año=year,
-        ingresos_totales=ingresos_totales,
-        gastos_totales=gastos_totales,
-        amortizaciones=amortizaciones_totales,
-        beneficio_neto=beneficio_neto,
-        irpf_estimado=irpf_estimado
-    )
+    # Buscar si ya existe previsión para ese año
+    prevision = db.query(IRPFPrevision).filter(IRPFPrevision.año == year).first()
 
-    db.add(prevision)
+    if prevision:
+        # Actualizar
+        prevision.ingresos_totales = ingresos_totales
+        prevision.gastos_totales = gastos_totales
+        prevision.nominas_totales = nominas_totales
+        prevision.amortizaciones_totales = amortizaciones_totales
+        prevision.beneficio_neto = beneficio_neto
+        prevision.irpf_estimado = irpf_estimado
+    else:
+        # Crear nueva
+        prevision = IRPFPrevision(
+            año=year,
+            ingresos_totales=ingresos_totales,
+            gastos_totales=gastos_totales,
+            nominas_totales=nominas_totales,
+            amortizaciones_totales=amortizaciones_totales,
+            beneficio_neto=beneficio_neto,
+            irpf_estimado=irpf_estimado
+        )
+        db.add(prevision)
+
     db.commit()
     db.refresh(prevision)
 

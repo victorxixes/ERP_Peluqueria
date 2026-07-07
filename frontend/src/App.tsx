@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./layout/Layout";
 
+import { LoginPage } from "./pages/LoginPage";
+
 import { DashboardPage } from "./pages/DashboardPage";
 import { IngresosPage } from "./pages/IngresosPage";
 import { GastosPage } from "./pages/GastosPage";
@@ -26,6 +28,11 @@ export const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* Login sin layout */}
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* Rutas protegidas con layout */}
         <Route element={<Layout />}>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/ingresos" element={<IngresosPage />} />
@@ -48,6 +55,7 @@ export const App = () => {
           <Route path="/backup" element={<BackupPage />} />
           <Route path="/importacion-caja" element={<ImportacionCajaPage />} />
         </Route>
+
       </Routes>
     </BrowserRouter>
   );

@@ -1,8 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from core.auth_dep import get_current_user
-from models.usuario import Usuario
 from db import get_db
 
 from services.nominas_service import (
@@ -17,7 +15,6 @@ router = APIRouter(prefix="/nominas", tags=["Nóminas"])
 
 @router.get("/")
 def get_nominas(
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return listar_nominas(db)
@@ -25,7 +22,6 @@ def get_nominas(
 @router.post("/")
 def post_nomina(
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return crear_nomina(db, data)
@@ -33,7 +29,6 @@ def post_nomina(
 @router.get("/{nomina_id}")
 def get_nomina(
     nomina_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return obtener_nomina(db, nomina_id)
@@ -42,7 +37,6 @@ def get_nomina(
 def put_nomina(
     nomina_id: int,
     data: dict,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return actualizar_nomina(db, nomina_id, data)
@@ -50,7 +44,6 @@ def put_nomina(
 @router.delete("/{nomina_id}")
 def delete_nomina(
     nomina_id: int,
-    user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return eliminar_nomina(db, nomina_id)
